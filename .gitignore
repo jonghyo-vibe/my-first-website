@@ -1,8 +1,26 @@
+# MCP 설정 파일
+.mcp.json
+
+# Node.js
 node_modules/
+package-lock.json
+
+# 캐시 및 빌드
+.cache/
+.vite/
 dist/
+
+# 환경 변수
 .env
 .env.local
 .env.*.local
-*.log
+
+# OS/IDE 파일
 .DS_Store
 Thumbs.db
+.vscode/
+.idea/
+
+# 로그 파일
+*.log
+npm-debug.log*
