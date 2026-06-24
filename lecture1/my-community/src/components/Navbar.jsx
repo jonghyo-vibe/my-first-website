@@ -31,7 +31,14 @@ export default function Navbar({ user, onLogout }) {
         <div style={s.right}>
           {user ? (
             <>
-              <span style={s.nick}>👤 {user.nickname}</span>
+              <div style={s.userInfo}>
+                <span style={s.nick}>👤 {user.nickname}</span>
+                {user.grade && (
+                  <span style={{ ...s.gradeBadge, background: user.grade.color + '22', color: user.grade.color, border: `1px solid ${user.grade.color}55` }}>
+                    {user.grade.emoji} {user.grade.label}
+                  </span>
+                )}
+              </div>
               <button className="btn btn-outline" style={{ padding: '6px 14px', fontSize: 12 }} onClick={() => navigate('/write')}>✏️ 글쓰기</button>
               <button className="btn btn-ghost" style={{ fontSize: 12 }} onClick={onLogout}>로그아웃</button>
             </>
@@ -55,5 +62,7 @@ const s = {
   menuItem: { fontSize: 13, fontWeight: 600, color: 'var(--text-muted)', padding: '6px 12px', borderRadius: 50, cursor: 'pointer', transition: 'all 0.15s' },
   menuActive: { color: 'var(--primary-dark)', background: 'var(--primary-soft)' },
   right: { display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 },
-  nick: { fontSize: 12, color: 'var(--text-muted)' },
+  userInfo: { display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 2 },
+  nick: { fontSize: 12, fontWeight: 700, color: 'var(--text)' },
+  gradeBadge: { fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 50 },
 }

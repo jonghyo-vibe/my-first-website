@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 
-export default function RegisterPage() {
+export default function RegisterPage({ onLogin }) {
   const navigate = useNavigate()
   const [form, setForm] = useState({ nickname: '', email: '', password: '', phone: '' })
   const [errors, setErrors] = useState({})
@@ -35,7 +35,7 @@ export default function RegisterPage() {
       return
     }
 
-    localStorage.setItem('user', JSON.stringify(data))
+    await onLogin(data)
     navigate('/')
   }
 
