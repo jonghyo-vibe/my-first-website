@@ -21,7 +21,7 @@ export default function App() {
   }
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/my-first-website">
       <Navbar user={user} onLogout={handleLogout} />
       <Routes>
         <Route path="/" element={<PostListPage user={user} />} />
