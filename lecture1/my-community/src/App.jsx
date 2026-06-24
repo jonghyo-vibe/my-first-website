@@ -6,6 +6,9 @@ import RegisterPage from './pages/RegisterPage'
 import PostListPage from './pages/PostListPage'
 import PostDetailPage from './pages/PostDetailPage'
 import WritePostPage from './pages/WritePostPage'
+import DesignersPage from './pages/DesignersPage'
+import PricePage from './pages/PricePage'
+import ReservationPage from './pages/ReservationPage'
 
 export default function App() {
   const [user, setUser] = useState(null)
@@ -29,6 +32,9 @@ export default function App() {
         <Route path="/register" element={user ? <Navigate to="/" /> : <RegisterPage />} />
         <Route path="/posts/:id" element={<PostDetailPage user={user} />} />
         <Route path="/write" element={<WritePostPage user={user} />} />
+        <Route path="/designers" element={<DesignersPage />} />
+        <Route path="/price" element={<PricePage />} />
+        <Route path="/reservation" element={<ReservationPage user={user} />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </BrowserRouter>
