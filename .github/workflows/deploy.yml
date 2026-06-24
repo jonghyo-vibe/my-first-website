@@ -1,4 +1,4 @@
-name: Deploy my-community to GitHub Pages
+name: Deploy to GitHub Pages
 
 on:
   push:
@@ -30,16 +30,40 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install dependencies
+      # ── my-community 빌드 ──
+      - name: Install dependencies (my-community)
         working-directory: lecture1/my-community
         run: npm install
 
-      - name: Build
+      - name: Build (my-community)
         working-directory: lecture1/my-community
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
         run: npm run build
+
+      # ── my-portfolio 빌드 ──
+      - name: Install dependencies (my-portfolio)
+        working-directory: lecture1/my-portfolio
+        run: npm install
+
+      - name: Build (my-portfolio)
+        working-directory: lecture1/my-portfolio
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+        run: npm run build
+
+      # ── 두 빌드 합치기 ──
+      # GitHub Pages URL: https://jonghyo-vibe.github.io/my-first-website/
+      #   my-community  → 루트 (base: /my-first-website/)
+      #   my-portfolio  → /my-portfolio/ 서브디렉토리 (base: /my-first-website/my-portfolio/)
+      - name: Merge builds into site/
+        run: |
+          mkdir -p site
+          cp -r lecture1/my-community/dist/.  site/
+          mkdir -p site/my-portfolio
+          cp -r lecture1/my-portfolio/dist/.  site/my-portfolio/
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -47,7 +71,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: lecture1/my-community/dist
+          path: site
 
       - name: Deploy to GitHub Pages
         id: deployment
