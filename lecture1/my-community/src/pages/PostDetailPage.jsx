@@ -4,6 +4,8 @@ import { supabase } from '../lib/supabase'
 import StarRating from '../components/StarRating'
 import CommentSection from '../components/CommentSection'
 
+const DESIGN_TYPES = ['전체 미용', '부분 미용', '목욕', '귀 청소', '발톱 정리', '스타일 컷', '기타']
+
 const formatDate = (iso) => {
   const d = new Date(iso)
   return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`
@@ -15,6 +17,9 @@ export default function PostDetailPage({ user }) {
   const [post, setPost] = useState(null)
   const [liked, setLiked] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [isEditing, setIsEditing] = useState(false)
+  const [editForm, setEditForm] = useState(null)
+  const [saving, setSaving] = useState(false)
 
   useEffect(() => { fetchPost() }, [id])
 
@@ -36,6 +41,48 @@ export default function PostDetailPage({ user }) {
         .single()
       setLiked(!!likeData)
     }
+  }
+
+  const startEdit = () => {
+    setEditForm({
+      title: post.title,
+      content: post.content,
+      design_type: post.design_type || '',
+      price: post.price || '',
+      before_image_url: post.before_image_url || '',
+      after_image_url: post.after_image_url || '',
+      star_rating: post.star_rating || 5,
+    })
+    setIsEditing(true)
+  }
+
+  const cancelEdit = () => {
+    setIsEditing(false)
+    setEditForm(null)
+  }
+
+  const handleEditChange = (e) => setEditForm({ ...editForm, [e.target.name]: e.target.value })
+
+  const handleSave = async () => {
+    setSaving(true)
+    const { error } = await supabase.from('posts').update({
+      title: editForm.title,
+      content: editForm.content,
+      design_type: editForm.design_type || null,
+      price: editForm.price ? parseInt(editForm.price) : null,
+      before_image_url: editForm.before_image_url || null,
+      after_image_url: editForm.after_image_url || null,
+      star_rating: editForm.star_rating,
+    }).eq('id', id)
+
+    if (!error) {
+      await fetchPost()
+      setIsEditing(false)
+      setEditForm(null)
+    } else {
+      alert('수정 중 오류가 발생했습니다.')
+    }
+    setSaving(false)
   }
 
   const handleLike = async () => {
@@ -75,63 +122,102 @@ export default function PostDetailPage({ user }) {
         <button className="btn btn-ghost" style={{ marginBottom: 16 }} onClick={() => navigate('/')}>← 목록으로</button>
 
         <div className="card" style={styles.card}>
-          {/* 전후 비교 사진 */}
-          {(post.before_image_url || post.after_image_url) && (
-            <div style={styles.imageRow}>
-              {post.before_image_url && (
-                <div style={styles.imageBox}>
-                  <p style={styles.imageLabel}>미용 전 🐶</p>
-                  <img src={post.before_image_url} alt="전" style={styles.image} />
-                </div>
-              )}
-              {post.after_image_url && (
-                <div style={styles.imageBox}>
-                  <p style={styles.imageLabel}>미용 후 ✨</p>
-                  <img src={post.after_image_url} alt="후" style={styles.image} />
-                </div>
-              )}
+          {isEditing ? (
+            /* ── 인라인 수정 모드 ── */
+            <div style={styles.editWrap}>
+              <h2 style={styles.editTitle}>✏️ 게시물 수정</h2>
+
+              <label style={styles.label}>제목 *</label>
+              <input name="title" value={editForm.title} onChange={handleEditChange} required style={styles.inputSpacing} />
+
+              <label style={styles.label}>디자인 종류</label>
+              <select name="design_type" value={editForm.design_type} onChange={handleEditChange} style={{ ...styles.select, ...styles.inputSpacing }}>
+                <option value="">선택하세요</option>
+                {DESIGN_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
+              </select>
+
+              <label style={styles.label}>가격 (원)</label>
+              <input name="price" type="number" value={editForm.price} onChange={handleEditChange} placeholder="예: 50000" style={styles.inputSpacing} />
+
+              <label style={styles.label}>별점</label>
+              <div style={styles.inputSpacing}>
+                <StarRating value={editForm.star_rating} onChange={(v) => setEditForm({ ...editForm, star_rating: v })} />
+              </div>
+
+              <label style={styles.label}>미용 전 사진 URL</label>
+              <input name="before_image_url" value={editForm.before_image_url} onChange={handleEditChange} placeholder="https://..." style={styles.inputSpacing} />
+
+              <label style={styles.label}>미용 후 사진 URL</label>
+              <input name="after_image_url" value={editForm.after_image_url} onChange={handleEditChange} placeholder="https://..." style={styles.inputSpacing} />
+
+              <label style={styles.label}>내용 *</label>
+              <textarea name="content" value={editForm.content} onChange={handleEditChange} rows={8} required style={{ resize: 'vertical', marginBottom: 20 }} />
+
+              <div style={styles.editBtns}>
+                <button className="btn btn-outline" onClick={cancelEdit}>취소</button>
+                <button className="btn btn-primary" onClick={handleSave} disabled={saving}>
+                  {saving ? '저장 중...' : '수정 완료'}
+                </button>
+              </div>
             </div>
+          ) : (
+            /* ── 일반 보기 모드 ── */
+            <>
+              {(post.before_image_url || post.after_image_url) && (
+                <div style={styles.imageRow}>
+                  {post.before_image_url && (
+                    <div style={styles.imageBox}>
+                      <p style={styles.imageLabel}>미용 전 🐶</p>
+                      <img src={post.before_image_url} alt="전" style={styles.image} />
+                    </div>
+                  )}
+                  {post.after_image_url && (
+                    <div style={styles.imageBox}>
+                      <p style={styles.imageLabel}>미용 후 ✨</p>
+                      <img src={post.after_image_url} alt="후" style={styles.image} />
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <div style={styles.body}>
+                <div style={styles.tagRow}>
+                  {post.design_type && <span style={styles.tag}>{post.design_type}</span>}
+                  {post.price && <span style={styles.price}>₩{post.price.toLocaleString()}</span>}
+                </div>
+
+                <h1 style={styles.title}>{post.title}</h1>
+
+                <div style={styles.meta}>
+                  <StarRating value={post.star_rating} readOnly />
+                  <span style={styles.metaText}>👤 {post.users?.nickname}</span>
+                  <span style={styles.metaText}>🕐 {formatDate(post.created_at)}</span>
+                  {post.updated_at !== post.created_at && (
+                    <span style={styles.metaText}>(수정됨)</span>
+                  )}
+                </div>
+
+                <p style={styles.content}>{post.content}</p>
+
+                <div style={styles.actions}>
+                  <button className="btn btn-ghost" style={liked ? styles.likedBtn : {}} onClick={handleLike}>
+                    {liked ? '❤️' : '🤍'} 좋아요 {post.likes_count}
+                  </button>
+                  <button className="btn btn-ghost" onClick={handleShare}>
+                    🔗 공유 {post.shares_count}
+                  </button>
+                  {user && user.id === post.user_id && (
+                    <>
+                      <button className="btn btn-ghost" onClick={startEdit}>✏️ 수정</button>
+                      <button className="btn btn-ghost" style={{ color: 'var(--error)' }} onClick={handleDelete}>🗑️ 삭제</button>
+                    </>
+                  )}
+                </div>
+              </div>
+            </>
           )}
-
-          <div style={styles.body}>
-            {/* 태그/가격 */}
-            <div style={styles.tagRow}>
-              {post.design_type && <span style={styles.tag}>{post.design_type}</span>}
-              {post.price && <span style={styles.price}>₩{post.price.toLocaleString()}</span>}
-            </div>
-
-            <h1 style={styles.title}>{post.title}</h1>
-
-            <div style={styles.meta}>
-              <StarRating value={post.star_rating} readOnly />
-              <span style={styles.metaText}>👤 {post.users?.nickname}</span>
-              <span style={styles.metaText}>🕐 {formatDate(post.created_at)}</span>
-              {post.updated_at !== post.created_at && (
-                <span style={styles.metaText}>(수정됨)</span>
-              )}
-            </div>
-
-            <p style={styles.content}>{post.content}</p>
-
-            {/* 액션 버튼 */}
-            <div style={styles.actions}>
-              <button className="btn btn-ghost" style={liked ? styles.likedBtn : {}} onClick={handleLike}>
-                {liked ? '❤️' : '🤍'} 좋아요 {post.likes_count}
-              </button>
-              <button className="btn btn-ghost" onClick={handleShare}>
-                🔗 공유 {post.shares_count}
-              </button>
-              {user && user.id === post.user_id && (
-                <>
-                  <button className="btn btn-ghost" onClick={() => navigate(`/edit/${post.id}`)}>✏️ 수정</button>
-                  <button className="btn btn-ghost" style={{ color: 'var(--error)' }} onClick={handleDelete}>🗑️ 삭제</button>
-                </>
-              )}
-            </div>
-          </div>
         </div>
 
-        {/* 댓글 섹션 */}
         <CommentSection postId={id} user={user} />
       </div>
     </div>
@@ -157,4 +243,10 @@ const styles = {
   content: { fontSize: 15, lineHeight: 1.7, color: 'var(--text)', whiteSpace: 'pre-wrap', marginBottom: 24 },
   actions: { display: 'flex', gap: 8, flexWrap: 'wrap', borderTop: '1px solid var(--border)', paddingTop: 16 },
   likedBtn: { color: '#e05c7a' },
+  editWrap: { padding: 28, display: 'flex', flexDirection: 'column' },
+  editTitle: { fontSize: 18, fontWeight: 900, marginBottom: 20, color: 'var(--text)' },
+  editBtns: { display: 'flex', gap: 10, justifyContent: 'flex-end' },
+  label: { fontSize: 13, fontWeight: 600, color: 'var(--text)', marginBottom: 4 },
+  inputSpacing: { marginBottom: 12 },
+  select: { border: '1.5px solid var(--border)', borderRadius: 10, padding: '10px 14px', fontSize: 14, color: 'var(--text)', background: '#fff', outline: 'none', fontFamily: 'inherit', width: '100%' },
 }

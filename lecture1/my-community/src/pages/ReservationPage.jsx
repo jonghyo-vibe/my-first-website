@@ -12,13 +12,19 @@ export default function ReservationPage({ user }) {
   const [loading, setLoading] = useState(false)
   const [done, setDone] = useState(false)
   const [myReservations, setMyReservations] = useState([])
+  const [editingId, setEditingId] = useState(null)
+  const [editForm, setEditForm] = useState({ reserved_date: '', reserved_time: '' })
+  const [editSaving, setEditSaving] = useState(false)
 
   useEffect(() => {
     supabase.from('designers').select('id, name, specialty').then(({ data }) => setDesigners(data || []))
-    if (user) {
-      supabase.from('reservations').select('*, designers(name)').eq('user_id', user.id).order('reserved_date').then(({ data }) => setMyReservations(data || []))
-    }
+    if (user) fetchMyReservations()
   }, [user])
+
+  const fetchMyReservations = async () => {
+    const { data } = await supabase.from('reservations').select('*, designers(name)').eq('user_id', user.id).order('reserved_date')
+    setMyReservations(data || [])
+  }
 
   if (!user) return (
     <div style={s.center}>
@@ -47,8 +53,7 @@ export default function ReservationPage({ user }) {
     setLoading(false)
     if (!error) {
       setDone(true)
-      const { data } = await supabase.from('reservations').select('*, designers(name)').eq('user_id', user.id).order('reserved_date')
-      setMyReservations(data || [])
+      await fetchMyReservations()
     }
   }
 
@@ -56,6 +61,34 @@ export default function ReservationPage({ user }) {
     if (!confirm('예약을 취소할까요?')) return
     await supabase.from('reservations').delete().eq('id', id)
     setMyReservations(myReservations.filter((r) => r.id !== id))
+  }
+
+  const startEditRes = (r) => {
+    setEditingId(r.id)
+    setEditForm({ reserved_date: r.reserved_date, reserved_time: r.reserved_time })
+  }
+
+  const cancelEditRes = () => {
+    setEditingId(null)
+    setEditForm({ reserved_date: '', reserved_time: '' })
+  }
+
+  const handleSaveEdit = async (id) => {
+    if (!editForm.reserved_date || !editForm.reserved_time) {
+      alert('날짜와 시간을 모두 선택해 주세요.')
+      return
+    }
+    setEditSaving(true)
+    const { error } = await supabase.from('reservations')
+      .update({ reserved_date: editForm.reserved_date, reserved_time: editForm.reserved_time })
+      .eq('id', id)
+    if (!error) {
+      await fetchMyReservations()
+      setEditingId(null)
+    } else {
+      alert('변경 중 오류가 발생했습니다.')
+    }
+    setEditSaving(false)
   }
 
   const today = new Date().toISOString().split('T')[0]
@@ -162,10 +195,46 @@ export default function ReservationPage({ user }) {
                         <span style={{ fontSize: 12, color: r.status === 'confirmed' ? 'var(--success)' : 'var(--text-muted)' }}>{STATUS_LABEL[r.status] || r.status}</span>
                       </div>
                       <p style={s.resMeta}>🐶 {r.pet_name} {r.pet_breed && `(${r.pet_breed})`}</p>
-                      <p style={s.resMeta}>📅 {r.reserved_date} {r.reserved_time}</p>
+
+                      {editingId === r.id ? (
+                        /* ── 예약변경 인라인 폼 ── */
+                        <div style={s.editBox}>
+                          <p style={s.editLabel}>날짜 변경</p>
+                          <input
+                            type="date"
+                            value={editForm.reserved_date}
+                            min={today}
+                            onChange={(e) => setEditForm({ ...editForm, reserved_date: e.target.value })}
+                            style={{ marginBottom: 8, width: '100%' }}
+                          />
+                          <p style={s.editLabel}>시간 변경</p>
+                          <div style={{ ...s.timeGrid, marginBottom: 10 }}>
+                            {TIMES.map((t) => (
+                              <button key={t} type="button"
+                                style={{ ...s.timeBtn, ...(editForm.reserved_time === t ? s.timeBtnActive : {}), fontSize: 11, padding: '6px 2px' }}
+                                onClick={() => setEditForm({ ...editForm, reserved_time: t })}>
+                                {t}
+                              </button>
+                            ))}
+                          </div>
+                          <div style={{ display: 'flex', gap: 6 }}>
+                            <button className="btn btn-outline" style={{ fontSize: 11, flex: 1 }} onClick={cancelEditRes}>취소</button>
+                            <button className="btn btn-primary" style={{ fontSize: 11, flex: 1 }} onClick={() => handleSaveEdit(r.id)} disabled={editSaving}>
+                              {editSaving ? '저장 중...' : '변경 완료'}
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <p style={s.resMeta}>📅 {r.reserved_date} {r.reserved_time}</p>
+                      )}
+
                       {r.designers && <p style={s.resMeta}>✂️ {r.designers.name} 디자이너</p>}
-                      {r.status === 'pending' && (
-                        <button className="btn btn-ghost" style={{ fontSize: 11, color: 'var(--error)', marginTop: 6 }} onClick={() => handleCancel(r.id)}>예약 취소</button>
+
+                      {r.status === 'pending' && editingId !== r.id && (
+                        <div style={{ display: 'flex', gap: 6, marginTop: 6 }}>
+                          <button className="btn btn-ghost" style={{ fontSize: 11, color: 'var(--primary-dark)' }} onClick={() => startEditRes(r)}>📝 예약변경</button>
+                          <button className="btn btn-ghost" style={{ fontSize: 11, color: 'var(--error)' }} onClick={() => handleCancel(r.id)}>예약 취소</button>
+                        </div>
                       )}
                     </div>
                   ))}
@@ -200,5 +269,7 @@ const s = {
   resTop: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 },
   resService: { fontWeight: 700, fontSize: 14, color: 'var(--text)' },
   resMeta: { fontSize: 12, color: 'var(--text-muted)', marginTop: 3 },
+  editBox: { background: '#fff', borderRadius: 10, padding: '10px 12px', marginTop: 8, marginBottom: 4, border: '1px solid var(--border)' },
+  editLabel: { fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', marginBottom: 4, marginTop: 2 },
   center: { minHeight: '80vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' },
 }
