@@ -1,39 +1,39 @@
 :root {
-  /* Primary Colors */
-  --color-primary:       #0080FF;
-  --color-primary-light: #00B9EF;
-  --color-primary-dark:  #005FCC;
+  /* Primary — 연한 초록 계열 */
+  --color-primary:       #52B788;
+  --color-primary-light: #74C69D;
+  --color-primary-dark:  #40916C;
 
-  /* Secondary Colors */
-  --color-secondary:       #12C0EC;
-  --color-secondary-light: #A9FFD4;
-  --color-secondary-dark:  #0090B0;
-  --color-accent:          #A9FFD4;
-  --color-accent-sage:     #D6EAD2;
+  /* Secondary */
+  --color-secondary:       #95D5B2;
+  --color-secondary-light: #D8F3DC;
+  --color-secondary-dark:  #52B788;
+  --color-accent:          #40916C;
+  --color-accent-sage:     #B7E4C7;
 
-  /* Background Colors */
-  --color-bg-primary:   #05101F;
+  /* Background */
+  --color-bg-primary:   #F4FAF0;
   --color-bg-secondary: #FFFFFF;
-  --color-bg-surface:   #F5F7FA;
+  --color-bg-surface:   #EAF4EA;
 
-  /* Text Colors */
-  --color-text-primary:   #1A1A2E;
-  --color-text-secondary: #FFFFFF;
-  --color-text-muted:     #555555;
+  /* Text */
+  --color-text-primary:   #1B4332;
+  --color-text-secondary: #2D6A4F;
+  --color-text-muted:     #52796F;
 
-  /* Interactive Colors */
-  --color-button-primary:  #0080FF;
-  --color-button-hover:    #00B9EF;
-  --color-button-active:   #005FCC;
-  --color-button-disabled: #AAAAAA;
-  --color-link:            #12C0EC;
-  --color-link-hover:      #0080FF;
-  --color-link-visited:    #8A60FF;
-  --color-focus-ring:      #A9FFD4;
+  /* Interactive */
+  --color-button-primary:  #52B788;
+  --color-button-hover:    #40916C;
+  --color-button-active:   #2D6A4F;
+  --color-button-disabled: #B7B7B7;
+  --color-link:            #40916C;
+  --color-link-hover:      #2D6A4F;
+  --color-link-visited:    #52B788;
+  --color-focus-ring:      #95D5B2;
 
-  /* Border / Outline */
-  --color-border-default: #D6EAD2;
-  --color-border-glow:    #A9FFD4;
+  /* Border */
+  --color-border-default: #B7E4C7;
+  --color-border-glow:    #52B788;
 }
 
 * {
@@ -44,7 +44,7 @@
 
 body {
   font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
-  background-color: var(--color-bg-secondary);
+  background-color: var(--color-bg-primary);
   color: var(--color-text-primary);
   -webkit-font-smoothing: antialiased;
 }

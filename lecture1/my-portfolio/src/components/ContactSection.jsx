@@ -1,29 +1,25 @@
 import { useState } from 'react'
 import {
-  Box, Typography, Card, CardContent, Avatar, Button,
+  Box, Typography, Card, CardContent, Button,
   TextField, Select, MenuItem, FormControl, InputLabel,
   Divider, Alert, CircularProgress,
 } from '@mui/material'
-import EmailIcon       from '@mui/icons-material/Email'
-import PhoneIcon       from '@mui/icons-material/Phone'
-import LocationOnIcon  from '@mui/icons-material/LocationOn'
 import InstagramIcon   from '@mui/icons-material/Instagram'
-import PersonIcon      from '@mui/icons-material/Person'
 import { QRCodeSVG }   from 'qrcode.react'
 import { supabase }    from '../lib/supabase'
 
 const PORTFOLIO_URL = 'https://jonghyo-vibe.github.io/my-first-website/my-portfolio/'
 
-const darkField = {
-  '& label': { color: 'rgba(255,255,255,0.55)' },
-  '& label.Mui-focused': { color: 'var(--color-accent)' },
+const greenField = {
+  '& label': { color: 'var(--color-text-muted)' },
+  '& label.Mui-focused': { color: 'var(--color-primary-dark)' },
   '& .MuiOutlinedInput-root': {
-    color: 'white',
-    '& fieldset':             { borderColor: 'rgba(169,255,212,0.25)' },
-    '&:hover fieldset':       { borderColor: 'rgba(169,255,212,0.55)' },
-    '&.Mui-focused fieldset': { borderColor: 'var(--color-accent)' },
+    color: 'var(--color-text-primary)',
+    '& fieldset':             { borderColor: 'var(--color-border-default)' },
+    '&:hover fieldset':       { borderColor: 'var(--color-primary)' },
+    '&.Mui-focused fieldset': { borderColor: 'var(--color-primary-dark)' },
   },
-  '& .MuiSelect-icon': { color: 'rgba(255,255,255,0.5)' },
+  '& .MuiSelect-icon': { color: 'var(--color-text-muted)' },
 }
 
 const INIT_FORM = {
@@ -63,12 +59,7 @@ const ContactSection = () => {
   }
 
   return (
-    <Box
-      sx={{
-        background: 'linear-gradient(135deg, var(--color-bg-primary) 0%, #0D2040 100%)',
-        color: 'var(--color-text-secondary)',
-      }}
-    >
+    <Box sx={{ background: 'var(--color-bg-primary)', minHeight: '100vh' }}>
       <Box
         sx={{
           width: '100%', maxWidth: 1100, mx: 'auto',
@@ -78,79 +69,22 @@ const ContactSection = () => {
         {/* ── 섹션 헤더 ── */}
         <Typography
           variant="overline"
-          sx={{ color: 'var(--color-accent)', letterSpacing: 4, display: 'block', mb: 1, textAlign: 'center' }}
+          sx={{ color: 'var(--color-primary)', letterSpacing: 4, display: 'block', mb: 1, textAlign: 'center' }}
         >
           CONTACT
         </Typography>
-        <Typography variant="h2" sx={{ color: 'white', mb: 1, textAlign: 'center' }}>
+        <Typography variant="h2" sx={{ color: 'var(--color-text-primary)', mb: 1, textAlign: 'center' }}>
           Contact
         </Typography>
         <Divider sx={{ mb: 6, borderColor: 'var(--color-border-glow)', maxWidth: 80, mx: 'auto' }} />
 
-        {/* ── 1. 프로필 카드 ── */}
-        <Card
-          sx={{
-            background: 'rgba(255,255,255,0.05)',
-            backdropFilter: 'blur(10px)',
-            border: '1px solid rgba(169,255,212,0.2)',
-            borderRadius: 3, mb: 4,
-          }}
-        >
-          <CardContent sx={{ p: { xs: 3, md: 4 } }}>
-            <Box sx={{ display: 'flex', gap: { xs: 2, md: 4 }, alignItems: 'center', flexWrap: 'wrap' }}>
-              <Avatar
-                sx={{
-                  width: { xs: 72, md: 100 }, height: { xs: 72, md: 100 },
-                  bgcolor: 'var(--color-primary)',
-                  border: '3px solid var(--color-accent)',
-                }}
-              >
-                <PersonIcon sx={{ fontSize: { xs: '2rem', md: '3rem' } }} />
-              </Avatar>
-              <Box sx={{ flex: 1, minWidth: 220 }}>
-                <Typography
-                  variant="h4"
-                  sx={{ color: 'var(--color-accent)', fontWeight: 700, mb: 2, fontSize: { xs: '1.4rem', md: '2rem' } }}
-                >
-                  jonghyo-vibe
-                </Typography>
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <LocationOnIcon sx={{ color: 'var(--color-primary-light)', fontSize: '1.2rem', flexShrink: 0 }} />
-                    <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.75)' }}>
-                      부산광역시 동래구 안락로 101번길 35, 101동 109호
-                    </Typography>
-                  </Box>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <EmailIcon sx={{ color: 'var(--color-primary-light)', fontSize: '1.2rem', flexShrink: 0 }} />
-                    <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.75)' }}>
-                      whdgy3019@naver.com
-                    </Typography>
-                  </Box>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <PhoneIcon sx={{ color: 'var(--color-primary-light)', fontSize: '1.2rem', flexShrink: 0 }} />
-                    <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.75)' }}>
-                      010-0000-0000
-                    </Typography>
-                  </Box>
-                </Box>
-              </Box>
-            </Box>
-          </CardContent>
-        </Card>
-
-        {/* ── 2. SNS 사각형 버튼 + QR 코드 ── */}
-        <Box
-          sx={{
-            display: 'flex', gap: 3, mb: 6,
-            flexWrap: 'wrap', alignItems: 'flex-start',
-          }}
-        >
+        {/* ── SNS 사각형 버튼 + QR 코드 ── */}
+        <Box sx={{ display: 'flex', gap: 3, mb: 6, flexWrap: 'wrap', alignItems: 'flex-start' }}>
           {/* SNS */}
           <Box>
             <Typography
               variant="overline"
-              sx={{ color: 'var(--color-accent)', letterSpacing: 3, display: 'block', mb: 2 }}
+              sx={{ color: 'var(--color-primary-dark)', letterSpacing: 3, display: 'block', mb: 2 }}
             >
               SNS
             </Typography>
@@ -161,15 +95,15 @@ const ContactSection = () => {
               target="_blank"
               rel="noopener noreferrer"
               sx={{
-                borderColor: 'rgba(169,255,212,0.4)',
-                color: 'white',
+                borderColor: 'var(--color-primary)',
+                color: 'var(--color-primary-dark)',
                 borderRadius: 2,
                 px: 3, py: 1.5,
                 textTransform: 'none',
                 fontSize: '1rem',
                 '&:hover': {
-                  borderColor: 'var(--color-accent)',
-                  background: 'rgba(169,255,212,0.1)',
+                  borderColor: 'var(--color-primary-dark)',
+                  background: 'var(--color-secondary-light)',
                 },
               }}
             >
@@ -181,30 +115,26 @@ const ContactSection = () => {
           <Box>
             <Typography
               variant="overline"
-              sx={{ color: 'var(--color-accent)', letterSpacing: 3, display: 'block', mb: 2 }}
+              sx={{ color: 'var(--color-primary-dark)', letterSpacing: 3, display: 'block', mb: 2 }}
             >
               QR CODE
             </Typography>
             <Card
               sx={{
-                background: 'rgba(255,255,255,0.05)',
-                border: '1px solid rgba(169,255,212,0.2)',
+                background: '#FFFFFF',
+                border: '1px solid var(--color-border-default)',
                 borderRadius: 3,
                 display: 'inline-block',
+                boxShadow: '0 2px 12px rgba(82,183,136,0.15)',
               }}
             >
               <CardContent sx={{ textAlign: 'center', p: '16px !important' }}>
-                <Box
-                  sx={{
-                    background: 'white', p: 1.5, borderRadius: 2,
-                    display: 'inline-block',
-                  }}
-                >
-                  <QRCodeSVG value={PORTFOLIO_URL} size={140} />
+                <Box sx={{ background: 'white', p: 1, borderRadius: 2, display: 'inline-block' }}>
+                  <QRCodeSVG value={PORTFOLIO_URL} size={140} fgColor="#1B4332" />
                 </Box>
                 <Typography
                   variant="caption"
-                  sx={{ color: 'rgba(255,255,255,0.5)', display: 'block', mt: 1.5 }}
+                  sx={{ color: 'var(--color-text-muted)', display: 'block', mt: 1.5 }}
                 >
                   포트폴리오 바로가기
                 </Typography>
@@ -213,22 +143,23 @@ const ContactSection = () => {
           </Box>
         </Box>
 
-        {/* ── 3. 방명록 폼 ── */}
+        {/* ── 방명록 폼 ── */}
         <Typography
           variant="overline"
-          sx={{ color: 'var(--color-accent)', letterSpacing: 3, display: 'block', mb: 2 }}
+          sx={{ color: 'var(--color-primary-dark)', letterSpacing: 3, display: 'block', mb: 2 }}
         >
           GUESTBOOK
         </Typography>
         <Card
           sx={{
-            background: 'rgba(255,255,255,0.05)',
-            border: '1px solid rgba(169,255,212,0.2)',
+            background: '#FFFFFF',
+            border: '1px solid var(--color-border-default)',
             borderRadius: 3,
+            boxShadow: '0 2px 16px rgba(82,183,136,0.12)',
           }}
         >
           <CardContent sx={{ p: { xs: 3, md: 4 } }}>
-            <Typography variant="h5" sx={{ color: 'white', mb: 3, fontWeight: 600 }}>
+            <Typography variant="h5" sx={{ color: 'var(--color-text-primary)', mb: 3, fontWeight: 600 }}>
               방명록 남기기 ✍️
             </Typography>
 
@@ -241,73 +172,52 @@ const ContactSection = () => {
                 gap: 2,
               }}
             >
-              {/* 이름 */}
-              <TextField
-                required fullWidth label="이름 *"
-                value={form.name} onChange={set('name')}
-                sx={darkField}
-              />
-              {/* 이메일 */}
-              <TextField
-                fullWidth label="이메일"
-                value={form.email} onChange={set('email')}
-                sx={darkField}
-              />
-              {/* 전화번호 */}
-              <TextField
-                fullWidth label="전화번호"
-                value={form.phone} onChange={set('phone')}
-                sx={darkField}
-              />
-              {/* SNS */}
-              <TextField
-                fullWidth label="SNS 계정 (예: @username)"
-                value={form.sns} onChange={set('sns')}
-                sx={darkField}
-              />
-              {/* 소속/직업 */}
-              <TextField
-                fullWidth label="소속 / 직업"
-                value={form.organization} onChange={set('organization')}
-                sx={darkField}
-              />
-              {/* 나이대 */}
-              <FormControl fullWidth sx={darkField}>
+              <TextField required fullWidth label="이름 *"
+                value={form.name} onChange={set('name')} sx={greenField} />
+
+              <TextField fullWidth label="이메일"
+                value={form.email} onChange={set('email')} sx={greenField} />
+
+              <TextField fullWidth label="전화번호"
+                value={form.phone} onChange={set('phone')} sx={greenField} />
+
+              <TextField fullWidth label="SNS 계정 (예: @username)"
+                value={form.sns} onChange={set('sns')} sx={greenField} />
+
+              <TextField fullWidth label="소속 / 직업"
+                value={form.organization} onChange={set('organization')} sx={greenField} />
+
+              <FormControl fullWidth sx={greenField}>
                 <InputLabel>나이대</InputLabel>
                 <Select value={form.age_group} label="나이대" onChange={set('age_group')}
-                  MenuProps={{ PaperProps: { sx: { background: '#0D2040', color: 'white' } } }}
+                  MenuProps={{ PaperProps: { sx: { background: '#FFFFFF' } } }}
                 >
                   {['10대', '20대', '30대', '40대', '50대 이상'].map((a) => (
                     <MenuItem key={a} value={a}>{a}</MenuItem>
                   ))}
                 </Select>
               </FormControl>
-              {/* 거주 지역 */}
-              <TextField
-                fullWidth label="거주 지역 (시 / 도)"
-                value={form.region} onChange={set('region')}
-                sx={darkField}
-              />
-              {/* 어떻게 알게 되었는지 */}
-              <FormControl fullWidth sx={darkField}>
+
+              <TextField fullWidth label="거주 지역 (시 / 도)"
+                value={form.region} onChange={set('region')} sx={greenField} />
+
+              <FormControl fullWidth sx={greenField}>
                 <InputLabel>어떻게 알게 되었나요?</InputLabel>
                 <Select value={form.how_found} label="어떻게 알게 되었나요?" onChange={set('how_found')}
-                  MenuProps={{ PaperProps: { sx: { background: '#0D2040', color: 'white' } } }}
+                  MenuProps={{ PaperProps: { sx: { background: '#FFFFFF' } } }}
                 >
                   {['지인 소개', 'SNS', '검색엔진', '직접 방문', '기타'].map((h) => (
                     <MenuItem key={h} value={h}>{h}</MenuItem>
                   ))}
                 </Select>
               </FormControl>
-              {/* 한마디 키워드 */}
-              <TextField
-                fullWidth label="한마디 키워드 (예: 천재, 멋있다)"
-                value={form.keyword} onChange={set('keyword')}
-                sx={darkField}
-              />
+
+              <TextField fullWidth label="한마디 키워드 (예: 천재, 멋있다)"
+                value={form.keyword} onChange={set('keyword')} sx={greenField} />
+
               {/* 별점 */}
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, pl: 1 }}>
-                <Typography sx={{ color: 'rgba(255,255,255,0.7)', mr: 1, fontSize: '0.9rem' }}>
+                <Typography sx={{ color: 'var(--color-text-muted)', mr: 1, fontSize: '0.9rem' }}>
                   별점
                 </Typography>
                 {[1, 2, 3, 4, 5].map((star) => (
@@ -320,7 +230,7 @@ const ContactSection = () => {
                       cursor: 'pointer',
                       fontSize: '2rem',
                       lineHeight: 1,
-                      color: star <= (hover || form.rating) ? '#FFD700' : 'rgba(255,255,255,0.25)',
+                      color: star <= (hover || form.rating) ? '#F4A623' : '#D8E8D8',
                       transition: 'color 0.15s',
                       userSelect: 'none',
                     }}
@@ -329,21 +239,16 @@ const ContactSection = () => {
                   </Box>
                 ))}
                 {form.rating > 0 && (
-                  <Typography sx={{ color: 'var(--color-accent)', ml: 1, fontSize: '0.85rem' }}>
+                  <Typography sx={{ color: 'var(--color-primary-dark)', ml: 1, fontSize: '0.85rem' }}>
                     {form.rating}점
                   </Typography>
                 )}
               </Box>
 
-              {/* 메시지 (full-width) */}
-              <TextField
-                required fullWidth multiline rows={4}
-                label="메시지 *"
+              <TextField required fullWidth multiline rows={4} label="메시지 *"
                 value={form.message} onChange={set('message')}
-                sx={{ ...darkField, gridColumn: '1 / -1' }}
-              />
+                sx={{ ...greenField, gridColumn: '1 / -1' }} />
 
-              {/* 알림 */}
               {error   && <Alert severity="error"   sx={{ gridColumn: '1 / -1' }}>{error}</Alert>}
               {success && (
                 <Alert severity="success" sx={{ gridColumn: '1 / -1' }}>
@@ -351,7 +256,6 @@ const ContactSection = () => {
                 </Alert>
               )}
 
-              {/* 제출 버튼 */}
               <Box sx={{ gridColumn: '1 / -1', display: 'flex', justifyContent: 'flex-end', mt: 1 }}>
                 <Button
                   type="submit"
@@ -360,6 +264,7 @@ const ContactSection = () => {
                   disabled={loading}
                   sx={{
                     background: 'var(--color-button-primary)',
+                    color: 'white',
                     '&:hover': { background: 'var(--color-button-hover)' },
                     px: 5, py: 1.5, borderRadius: 2,
                     minWidth: 180,
