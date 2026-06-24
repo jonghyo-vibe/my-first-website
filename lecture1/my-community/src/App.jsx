@@ -10,6 +10,7 @@ import WritePostPage from './pages/WritePostPage'
 import DesignersPage from './pages/DesignersPage'
 import PricePage from './pages/PricePage'
 import ReservationPage from './pages/ReservationPage'
+import EditPostPage from './pages/EditPostPage'
 
 const getGrade = (postCount) => {
   if (postCount >= 20) return { label: '미용마스터', emoji: '👑', color: '#f5a623' }
@@ -52,6 +53,7 @@ export default function App() {
         <Route path="/register" element={user ? <Navigate to="/" /> : <RegisterPage onLogin={handleLogin} />} />
         <Route path="/posts/:id" element={<PostDetailPage user={user} />} />
         <Route path="/write" element={<WritePostPage user={user} />} />
+        <Route path="/edit/:id" element={<EditPostPage user={user} />} />
         <Route path="/designers" element={<DesignersPage />} />
         <Route path="/price" element={<PricePage />} />
         <Route path="/reservation" element={<ReservationPage user={user} />} />
