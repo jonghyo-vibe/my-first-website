@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const heroImages = [
-  { url: 'https://picsum.photos/seed/hero1/600/400', label: '모던 리빙룸' },
-  { url: 'https://picsum.photos/seed/hero2/600/400', label: '미니멀 침실' },
-  { url: 'https://picsum.photos/seed/hero3/600/400', label: '북유럽 주방' },
+  { url: 'https://images.unsplash.com/photo-1598928506311-c55ded91a20c?w=600&h=400&fit=crop&auto=format', label: '모던 리빙룸' },
+  { url: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=600&h=400&fit=crop&auto=format', label: '미니멀 침실' },
+  { url: 'https://images.unsplash.com/photo-1600566752229-250ed79470f8?w=600&h=400&fit=crop&auto=format', label: '북유럽 주방' },
 ]
 
 export default function HeroSection() {
