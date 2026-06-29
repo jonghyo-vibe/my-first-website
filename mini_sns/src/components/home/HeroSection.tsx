@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const heroImages = [
@@ -37,7 +37,7 @@ export default function HeroSection() {
         </h2>
         <button
           onClick={() => navigate('/posts')}
-          className="px-5 py-2.5 bg-sky-500 text-white text-sm font-semibold rounded-full hover:bg-sky-600 transition-colors shadow-lg"
+          className="px-5 py-2.5 bg-indigo-500 text-white text-sm font-semibold rounded-full hover:bg-indigo-600 transition-colors shadow-lg"
         >
           인테리어 구경하기
         </button>

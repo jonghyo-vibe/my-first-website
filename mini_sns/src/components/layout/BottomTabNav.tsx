@@ -1,4 +1,4 @@
-import { useNavigate, useLocation } from 'react-router-dom'
+﻿import { useNavigate, useLocation } from 'react-router-dom'
 import { FiHome, FiGrid, FiPlusSquare, FiUser } from 'react-icons/fi'
 
 const tabs = [
@@ -18,7 +18,7 @@ export default function BottomTabNav() {
   }
 
   return (
-    <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-white border-t border-slate-100 z-50 safe-area-pb">
+    <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-white border-t border-violet-100 z-50 safe-area-pb">
       <div className="flex items-center justify-around h-[70px] px-2">
         {tabs.map(({ path, icon: Icon, label }) => {
           const active = isActive(path)
@@ -31,18 +31,18 @@ export default function BottomTabNav() {
                 isCreate
                   ? 'text-white'
                   : active
-                  ? 'text-sky-500'
+                  ? 'text-indigo-500'
                   : 'text-slate-400'
               }`}
             >
               {isCreate ? (
-                <span className="flex items-center justify-center w-11 h-11 bg-sky-500 rounded-2xl shadow-md shadow-sky-200">
+                <span className="flex items-center justify-center w-11 h-11 bg-indigo-500 rounded-2xl shadow-md shadow-indigo-200">
                   <Icon className="w-5 h-5 text-white" />
                 </span>
               ) : (
                 <>
                   <Icon className={`w-5 h-5 ${active ? 'stroke-[2.5px]' : ''}`} />
-                  <span className={`text-[10px] font-medium ${active ? 'text-sky-500' : 'text-slate-400'}`}>
+                  <span className={`text-[10px] font-medium ${active ? 'text-indigo-500' : 'text-slate-400'}`}>
                     {label}
                   </span>
                 </>

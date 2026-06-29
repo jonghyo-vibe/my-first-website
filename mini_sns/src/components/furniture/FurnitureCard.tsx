@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { FiHeart, FiShoppingCart } from 'react-icons/fi'
 import type { Furniture } from '../../types'
 import { supabase } from '../../lib/supabase'
@@ -46,11 +46,11 @@ export default function FurnitureCard({ item, onLike, isLiked, showRank }: Furni
   return (
     <>
       <div
-        className="furniture-card relative bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 cursor-pointer hover:shadow-md transition-shadow"
+        className="furniture-card relative bg-white rounded-2xl overflow-hidden shadow-sm border border-violet-100 cursor-pointer hover:shadow-md transition-shadow"
         onClick={() => setShowRecommend(true)}
       >
         {showRank && item.monthly_rank && (
-          <span className="absolute top-2 left-2 z-10 w-6 h-6 bg-sky-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
+          <span className="absolute top-2 left-2 z-10 w-6 h-6 bg-indigo-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
             {item.monthly_rank}
           </span>
         )}
@@ -70,7 +70,7 @@ export default function FurnitureCard({ item, onLike, isLiked, showRank }: Furni
           {/* hover 시 가격 표시 */}
           <div className="price-tooltip absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent px-3 py-2">
             <p className="text-white text-xs font-medium">{item.name}</p>
-            <p className="text-sky-300 font-bold text-sm">{item.price.toLocaleString()}원</p>
+            <p className="text-indigo-300 font-bold text-sm">{item.price.toLocaleString()}원</p>
           </div>
         </div>
 
@@ -100,12 +100,12 @@ export default function FurnitureCard({ item, onLike, isLiked, showRank }: Furni
                 <FiHeart className={`w-4 h-4 ${liked ? 'fill-rose-500 text-rose-500' : 'text-slate-400'}`} />
               </button>
               <button onClick={handleAddCart} className="touch-target flex items-center justify-center">
-                <FiShoppingCart className={`w-4 h-4 ${addedCart ? 'text-sky-500' : 'text-slate-400'}`} />
+                <FiShoppingCart className={`w-4 h-4 ${addedCart ? 'text-indigo-500' : 'text-slate-400'}`} />
               </button>
             </div>
           </div>
           {addedCart && (
-            <p className="text-sky-500 text-[10px] text-right mt-1">장바구니에 추가됨!</p>
+            <p className="text-indigo-500 text-[10px] text-right mt-1">장바구니에 추가됨!</p>
           )}
         </div>
       </div>
@@ -139,9 +139,9 @@ function RecommendModal({ item, onClose }: { item: Furniture; onClose: () => voi
         className="w-full max-w-[480px] mx-auto bg-white rounded-t-3xl p-6 max-h-[85vh] overflow-y-auto"
         onClick={e => e.stopPropagation()}
       >
-        <div className="w-12 h-1 bg-slate-200 rounded-full mx-auto mb-4" />
+        <div className="w-12 h-1 bg-violet-200 rounded-full mx-auto mb-4" />
         <h3 className="font-bold text-slate-800 mb-1">{item.name}</h3>
-        <p className="text-sky-500 font-bold text-lg mb-2">{item.price.toLocaleString()}원</p>
+        <p className="text-indigo-500 font-bold text-lg mb-2">{item.price.toLocaleString()}원</p>
         <p className="text-slate-500 text-sm mb-4">{item.description}</p>
 
         {related.length > 0 && (
@@ -149,11 +149,11 @@ function RecommendModal({ item, onClose }: { item: Furniture; onClose: () => voi
             <p className="font-semibold text-slate-700 mb-3">함께 보면 좋은 가구</p>
             <div className="grid grid-cols-2 gap-3">
               {related.map(r => (
-                <div key={r.id} className="bg-slate-50 rounded-xl overflow-hidden">
+                <div key={r.id} className="bg-violet-50 rounded-xl overflow-hidden">
                   <img src={r.image_url} alt={r.name} className="w-full aspect-square object-cover" />
                   <div className="p-2">
                     <p className="text-xs font-medium text-slate-700 line-clamp-1">{r.name}</p>
-                    <p className="text-xs text-sky-600 font-bold">{r.price.toLocaleString()}원</p>
+                    <p className="text-xs text-indigo-600 font-bold">{r.price.toLocaleString()}원</p>
                   </div>
                 </div>
               ))}
@@ -163,7 +163,7 @@ function RecommendModal({ item, onClose }: { item: Furniture; onClose: () => voi
 
         <button
           onClick={onClose}
-          className="w-full mt-4 py-3 bg-sky-500 text-white font-semibold rounded-xl hover:bg-sky-600 transition-colors"
+          className="w-full mt-4 py-3 bg-indigo-500 text-white font-semibold rounded-xl hover:bg-indigo-600 transition-colors"
         >
           닫기
         </button>

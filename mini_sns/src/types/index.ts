@@ -1,4 +1,4 @@
-export interface SnsUser {
+﻿export interface SnsUser {
   id: string
   email: string
   display_name: string

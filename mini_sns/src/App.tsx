@@ -1,4 +1,4 @@
-import { HashRouter, Routes, Route } from 'react-router-dom'
+﻿import { HashRouter, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './store/authContext'
 import LoginPage from './pages/LoginPage'
 import HomePage from './pages/HomePage'

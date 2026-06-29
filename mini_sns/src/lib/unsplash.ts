@@ -1,4 +1,4 @@
-const UNSPLASH_ACCESS_KEY = import.meta.env.VITE_UNSPLASH_ACCESS_KEY as string
+﻿const UNSPLASH_ACCESS_KEY = import.meta.env.VITE_UNSPLASH_ACCESS_KEY as string
 
 export interface UnsplashPhoto {
   id: string

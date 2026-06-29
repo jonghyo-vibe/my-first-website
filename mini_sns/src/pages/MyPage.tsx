@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+﻿import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Header from '../components/layout/Header'
 import BottomTabNav from '../components/layout/BottomTabNav'
@@ -89,7 +89,7 @@ export default function MyPage() {
           <p className="text-5xl">👤</p>
           <p className="font-bold text-slate-700 text-lg">로그인이 필요합니다</p>
           <p className="text-slate-500 text-sm text-center">로그인하고 장바구니, 주문내역, 좋아요 기능을 사용해보세요</p>
-          <button onClick={() => navigate('/login')} className="w-full max-w-xs py-4 bg-sky-500 text-white font-bold rounded-2xl">
+          <button onClick={() => navigate('/login')} className="w-full max-w-xs py-4 bg-indigo-500 text-white font-bold rounded-2xl">
             로그인 / 회원가입
           </button>
         </div>
@@ -106,14 +106,14 @@ export default function MyPage() {
   ]
 
   const orderStatusColor: Record<Order['status'], string> = {
-    ordered: 'bg-slate-100 text-slate-600',
+    ordered: 'bg-violet-100 text-slate-600',
     confirmed: 'bg-yellow-100 text-yellow-700',
     shipping: 'bg-blue-100 text-blue-700',
     delivered: 'bg-green-100 text-green-700',
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-slate-50">
+    <div className="flex flex-col min-h-screen bg-violet-50">
       <Header title="마이페이지" />
 
       <main className="flex-1 page-content">
@@ -124,7 +124,7 @@ export default function MyPage() {
               <img
                 src={currentUser.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${currentUser.id}`}
                 alt="profile"
-                className="w-16 h-16 rounded-full object-cover border-2 border-sky-200"
+                className="w-16 h-16 rounded-full object-cover border-2 border-indigo-200"
               />
             </div>
             <div className="flex-1">
@@ -139,12 +139,12 @@ export default function MyPage() {
           </div>
 
           {/* 통계 */}
-          <div className="grid grid-cols-3 gap-2 mt-4 bg-slate-50 rounded-2xl p-3">
+          <div className="grid grid-cols-3 gap-2 mt-4 bg-violet-50 rounded-2xl p-3">
             <div className="text-center">
               <p className="font-bold text-slate-800 text-lg">{myPosts.length}</p>
               <p className="text-slate-500 text-xs">게시물</p>
             </div>
-            <div className="text-center border-x border-slate-200">
+            <div className="text-center border-x border-violet-200">
               <p className="font-bold text-slate-800 text-lg">{liked.length}</p>
               <p className="text-slate-500 text-xs">좋아요</p>
             </div>
@@ -156,13 +156,13 @@ export default function MyPage() {
         </div>
 
         {/* 탭 */}
-        <div className="bg-white border-b border-slate-100 flex overflow-x-auto">
+        <div className="bg-white border-b border-violet-100 flex overflow-x-auto">
           {myTabs.map(({ key, label, icon: Icon }) => (
             <button
               key={key}
               onClick={() => setTab(key)}
               className={`flex-1 flex flex-col items-center gap-1 py-3 min-w-[60px] text-xs font-medium border-b-2 transition-colors ${
-                tab === key ? 'text-sky-500 border-sky-500' : 'text-slate-400 border-transparent'
+                tab === key ? 'text-indigo-500 border-indigo-500' : 'text-slate-400 border-transparent'
               }`}
             >
               <Icon className="w-4 h-4" />
@@ -180,7 +180,7 @@ export default function MyPage() {
                   {/* 장바구니 */}
                   <div>
                     <div className="flex items-center gap-2 mb-3">
-                      <FiShoppingCart className="w-4 h-4 text-sky-500" />
+                      <FiShoppingCart className="w-4 h-4 text-indigo-500" />
                       <h3 className="font-bold text-slate-800">장바구니 ({cart.length})</h3>
                     </div>
                     {cart.length === 0 ? (
@@ -195,19 +195,19 @@ export default function MyPage() {
                             <img src={c.sns_furniture.image_url} alt={c.sns_furniture.name} className="w-16 h-16 rounded-xl object-cover" />
                             <div className="flex-1 min-w-0">
                               <p className="font-medium text-slate-800 text-sm line-clamp-1">{c.sns_furniture.name}</p>
-                              <p className="text-sky-600 font-bold text-sm">{c.sns_furniture.price.toLocaleString()}원</p>
+                              <p className="text-indigo-600 font-bold text-sm">{c.sns_furniture.price.toLocaleString()}원</p>
                               <p className="text-slate-400 text-xs">수량: {c.quantity}개</p>
                             </div>
                             <div className="flex flex-col gap-1">
-                              <button onClick={() => handleOrder(c)} className="px-3 py-1.5 bg-sky-500 text-white text-xs font-medium rounded-lg">주문</button>
-                              <button onClick={() => handleRemoveCart(c.id)} className="px-3 py-1.5 bg-slate-100 text-slate-600 text-xs font-medium rounded-lg">삭제</button>
+                              <button onClick={() => handleOrder(c)} className="px-3 py-1.5 bg-indigo-500 text-white text-xs font-medium rounded-lg">주문</button>
+                              <button onClick={() => handleRemoveCart(c.id)} className="px-3 py-1.5 bg-violet-100 text-slate-600 text-xs font-medium rounded-lg">삭제</button>
                             </div>
                           </div>
                         ))}
                         {cart.length > 0 && (
-                          <div className="bg-sky-50 rounded-2xl p-3 flex items-center justify-between">
+                          <div className="bg-indigo-50 rounded-2xl p-3 flex items-center justify-between">
                             <span className="text-slate-600 text-sm font-medium">총 금액</span>
-                            <span className="text-sky-600 font-bold">
+                            <span className="text-indigo-600 font-bold">
                               {cart.reduce((sum, c) => sum + (c.sns_furniture?.price ?? 0) * c.quantity, 0).toLocaleString()}원
                             </span>
                           </div>
@@ -219,7 +219,7 @@ export default function MyPage() {
                   {/* 주문/배송 현황 */}
                   <div>
                     <div className="flex items-center gap-2 mb-3">
-                      <FiPackage className="w-4 h-4 text-sky-500" />
+                      <FiPackage className="w-4 h-4 text-indigo-500" />
                       <h3 className="font-bold text-slate-800">주문/배송 현황 ({orders.length})</h3>
                     </div>
                     {orders.length === 0 ? (
@@ -255,16 +255,16 @@ export default function MyPage() {
                     <div className="text-center py-12 text-slate-400">
                       <p className="text-4xl mb-3">🤍</p>
                       <p className="font-medium">좋아요한 가구가 없어요</p>
-                      <button onClick={() => navigate('/posts')} className="mt-3 text-sky-500 text-sm">가구 둘러보기</button>
+                      <button onClick={() => navigate('/posts')} className="mt-3 text-indigo-500 text-sm">가구 둘러보기</button>
                     </div>
                   ) : (
                     <div className="grid grid-cols-2 gap-3">
                       {liked.map(l => l.sns_furniture && (
-                        <div key={l.id} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100">
+                        <div key={l.id} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-violet-100">
                           <img src={l.sns_furniture.image_url} alt={l.sns_furniture.name} className="w-full aspect-square object-cover" />
                           <div className="p-2.5">
                             <p className="text-slate-800 text-xs font-medium line-clamp-1">{l.sns_furniture.name}</p>
-                            <p className="text-sky-600 text-xs font-bold mt-0.5">{l.sns_furniture.price.toLocaleString()}원</p>
+                            <p className="text-indigo-600 text-xs font-bold mt-0.5">{l.sns_furniture.price.toLocaleString()}원</p>
                           </div>
                         </div>
                       ))}
@@ -280,7 +280,7 @@ export default function MyPage() {
                     <div className="text-center py-12 text-slate-400">
                       <p className="text-4xl mb-3">📷</p>
                       <p className="font-medium">아직 게시물이 없어요</p>
-                      <button onClick={() => navigate('/posts/create')} className="mt-3 text-sky-500 text-sm">첫 게시물 올리기</button>
+                      <button onClick={() => navigate('/posts/create')} className="mt-3 text-indigo-500 text-sm">첫 게시물 올리기</button>
                     </div>
                   ) : (
                     <div className="grid grid-cols-3 gap-1.5">
@@ -317,12 +317,12 @@ export default function MyPage() {
                   ) : (
                     <div className="grid grid-cols-2 gap-3">
                       {recommended.map(f => (
-                        <div key={f.id} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100">
+                        <div key={f.id} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-violet-100">
                           <img src={f.image_url} alt={f.name} className="w-full aspect-square object-cover" />
                           <div className="p-3">
                             <p className="text-slate-500 text-[11px]">{f.category}</p>
                             <p className="font-medium text-slate-800 text-sm line-clamp-1">{f.name}</p>
-                            <p className="text-sky-600 font-bold text-sm mt-1">{f.price.toLocaleString()}원</p>
+                            <p className="text-indigo-600 font-bold text-sm mt-1">{f.price.toLocaleString()}원</p>
                             <div className="flex items-center gap-1 mt-1">
                               <span className="text-yellow-400 text-xs">★</span>
                               <span className="text-slate-500 text-xs">{f.rating}</span>

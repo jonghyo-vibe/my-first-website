@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+﻿import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import Header from '../components/layout/Header'
 import BottomTabNav from '../components/layout/BottomTabNav'
@@ -75,7 +75,7 @@ export default function PostDetailPage() {
 
       <main className="flex-1 page-content">
         {/* 작성자 정보 */}
-        <div className="flex items-center gap-3 px-4 py-3 border-b border-slate-100">
+        <div className="flex items-center gap-3 px-4 py-3 border-b border-violet-100">
           <img
             src={user?.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${post.user_id}`}
             alt="avatar"
@@ -85,7 +85,7 @@ export default function PostDetailPage() {
             <p className="font-semibold text-slate-800">{user?.display_name ?? '익명'}</p>
             <p className="text-slate-400 text-xs">{new Date(post.created_at).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
           </div>
-          <span className="ml-auto text-xs bg-sky-50 text-sky-600 px-2.5 py-1 rounded-full font-medium">
+          <span className="ml-auto text-xs bg-indigo-50 text-indigo-600 px-2.5 py-1 rounded-full font-medium">
             {ROOM_SIZE_LABELS[post.room_size]}
           </span>
         </div>
@@ -94,7 +94,7 @@ export default function PostDetailPage() {
         <img src={post.image_url} alt={post.caption} className="w-full aspect-square object-cover" />
 
         {/* 좋아요/댓글 액션 */}
-        <div className="flex items-center gap-4 px-4 py-3 border-b border-slate-100">
+        <div className="flex items-center gap-4 px-4 py-3 border-b border-violet-100">
           <button onClick={handleLike} className={`flex items-center gap-1.5 text-sm font-medium transition-colors ${liked ? 'text-rose-500' : 'text-slate-500'}`}>
             <FiHeart className={`w-5 h-5 ${liked ? 'fill-rose-500' : ''}`} />
             {likesCount}
@@ -104,14 +104,14 @@ export default function PostDetailPage() {
             {comments.length}
           </button>
           {!currentUser && (
-            <button onClick={() => navigate('/login')} className="ml-auto text-xs text-sky-500 font-medium">
+            <button onClick={() => navigate('/login')} className="ml-auto text-xs text-indigo-500 font-medium">
               로그인하고 좋아요 남기기
             </button>
           )}
         </div>
 
         {/* 캡션 */}
-        <div className="px-4 py-3 border-b border-slate-100">
+        <div className="px-4 py-3 border-b border-violet-100">
           <p className="text-slate-800 text-sm leading-relaxed">{post.caption}</p>
         </div>
 
@@ -130,7 +130,7 @@ export default function PostDetailPage() {
                     className="w-7 h-7 rounded-full object-cover flex-shrink-0"
                   />
                   <div className="flex-1">
-                    <div className="bg-slate-50 rounded-2xl px-3 py-2">
+                    <div className="bg-violet-50 rounded-2xl px-3 py-2">
                       <p className="font-medium text-slate-800 text-xs">{c.sns_users?.display_name ?? '익명'}</p>
                       <p className="text-slate-700 text-sm mt-0.5">{c.content}</p>
                     </div>
@@ -147,18 +147,18 @@ export default function PostDetailPage() {
       {currentUser && (
         <form
           onSubmit={handleComment}
-          className="sticky bottom-[70px] bg-white border-t border-slate-100 px-4 py-3 flex gap-2"
+          className="sticky bottom-[70px] bg-white border-t border-violet-100 px-4 py-3 flex gap-2"
         >
           <input
             value={commentText}
             onChange={e => setCommentText(e.target.value)}
             placeholder="댓글을 입력하세요..."
-            className="flex-1 bg-slate-50 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-200"
+            className="flex-1 bg-violet-50 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-200"
           />
           <button
             type="submit"
             disabled={!commentText.trim()}
-            className="w-9 h-9 bg-sky-500 text-white rounded-full flex items-center justify-center disabled:opacity-40"
+            className="w-9 h-9 bg-indigo-500 text-white rounded-full flex items-center justify-center disabled:opacity-40"
           >
             <FiSend className="w-4 h-4" />
           </button>

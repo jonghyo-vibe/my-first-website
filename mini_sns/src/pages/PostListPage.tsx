@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+﻿import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import Header from '../components/layout/Header'
 import BottomTabNav from '../components/layout/BottomTabNav'
@@ -45,10 +45,10 @@ export default function PostListPage() {
   }, [tab, roomSize, category])
 
   return (
-    <div className="flex flex-col min-h-screen bg-slate-50">
+    <div className="flex flex-col min-h-screen bg-violet-50">
       <Header title="둘러보기" />
 
-      <div className="bg-white border-b border-slate-100 sticky top-14 z-40">
+      <div className="bg-white border-b border-violet-100 sticky top-14 z-40">
         {/* 탭 */}
         <div className="flex px-4 pt-3 gap-4">
           {(['furniture', 'interior'] as TabType[]).map(t => (
@@ -56,7 +56,7 @@ export default function PostListPage() {
               key={t}
               onClick={() => setTab(t)}
               className={`pb-2 text-sm font-semibold border-b-2 transition-colors ${
-                tab === t ? 'text-sky-500 border-sky-500' : 'text-slate-400 border-transparent'
+                tab === t ? 'text-indigo-500 border-indigo-500' : 'text-slate-400 border-transparent'
               }`}
             >
               {t === 'furniture' ? '가구 쇼핑' : '인테리어 피드'}
@@ -88,8 +88,8 @@ export default function PostListPage() {
                   onClick={() => setRoomSize(size)}
                   className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
                     roomSize === size
-                      ? 'bg-sky-500 text-white border-sky-500'
-                      : 'bg-white text-slate-600 border-slate-200'
+                      ? 'bg-indigo-500 text-white border-indigo-500'
+                      : 'bg-white text-slate-600 border-violet-200'
                   }`}
                 >
                   {label}
@@ -106,8 +106,8 @@ export default function PostListPage() {
                       onClick={() => setCategory(cat === '전체' ? '' : cat)}
                       className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
                         (cat === '전체' && !category) || cat === category
-                          ? 'bg-sky-500 text-white border-sky-500'
-                          : 'bg-white text-slate-600 border-slate-200'
+                          ? 'bg-indigo-500 text-white border-indigo-500'
+                          : 'bg-white text-slate-600 border-violet-200'
                       }`}
                     >
                       {cat}
@@ -128,8 +128,8 @@ export default function PostListPage() {
                 onClick={() => setCategory(cat === '전체' ? '' : cat)}
                 className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
                   (cat === '전체' && !category) || cat === category
-                    ? 'bg-sky-500 text-white border-sky-500'
-                    : 'bg-white text-slate-600 border-slate-200'
+                    ? 'bg-indigo-500 text-white border-indigo-500'
+                    : 'bg-white text-slate-600 border-violet-200'
                 }`}
               >
                 {cat}
@@ -169,7 +169,7 @@ export default function PostListPage() {
               <div className="text-center py-16 text-slate-400">
                 <p className="text-4xl mb-3">📷</p>
                 <p className="font-medium">아직 게시물이 없어요</p>
-                <button onClick={() => navigate('/posts/create')} className="mt-3 text-sky-500 text-sm font-medium">
+                <button onClick={() => navigate('/posts/create')} className="mt-3 text-indigo-500 text-sm font-medium">
                   첫 번째 인테리어 공유하기
                 </button>
               </div>
@@ -190,7 +190,7 @@ function FurnitureListItem({ item }: { item: Furniture }) {
     : 0
   return (
     <div
-      className="bg-white rounded-2xl p-3 flex gap-3 shadow-sm border border-slate-100 cursor-pointer"
+      className="bg-white rounded-2xl p-3 flex gap-3 shadow-sm border border-violet-100 cursor-pointer"
       onClick={() => {}}
     >
       <img src={item.image_url} alt={item.name} className="w-20 h-20 rounded-xl object-cover flex-shrink-0" />
@@ -218,7 +218,7 @@ function PostCard({ post }: { post: SnsPost }) {
   const navigate = useNavigate()
   const user = post.sns_users
   return (
-    <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100">
+    <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-violet-100">
       <div className="flex items-center gap-2 p-3">
         <img
           src={user?.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${post.user_id}`}
@@ -239,7 +239,7 @@ function PostCard({ post }: { post: SnsPost }) {
       <div className="p-3">
         <p className="text-slate-700 text-sm line-clamp-2">{post.caption}</p>
         <div className="flex items-center justify-between mt-2">
-          <span className="text-xs text-sky-500 bg-sky-50 px-2 py-0.5 rounded-full">
+          <span className="text-xs text-indigo-500 bg-indigo-50 px-2 py-0.5 rounded-full">
             {ROOM_SIZE_LABELS[post.room_size]}
           </span>
           <div className="flex items-center gap-1 text-slate-400 text-xs">

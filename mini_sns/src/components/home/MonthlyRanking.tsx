@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+﻿import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
 import type { Furniture } from '../../types'
@@ -32,11 +32,11 @@ export default function MonthlyRanking() {
     <>
       {[1, 2, 3].map(r => (
         <div key={r} className="flex items-center gap-2 py-1.5 animate-pulse">
-          <div className="w-4 h-4 bg-slate-200 rounded-full flex-shrink-0" />
-          <div className="w-8 h-8 bg-slate-200 rounded-lg flex-shrink-0" />
+          <div className="w-4 h-4 bg-violet-200 rounded-full flex-shrink-0" />
+          <div className="w-8 h-8 bg-violet-200 rounded-lg flex-shrink-0" />
           <div className="flex-1 space-y-1">
-            <div className="h-2 bg-slate-200 rounded w-full" />
-            <div className="h-2 bg-slate-100 rounded w-2/3" />
+            <div className="h-2 bg-violet-200 rounded w-full" />
+            <div className="h-2 bg-violet-100 rounded w-2/3" />
           </div>
         </div>
       ))}
@@ -46,16 +46,16 @@ export default function MonthlyRanking() {
   return (
     <div className="grid grid-cols-2 gap-3">
       {/* 이달의 가구 순위 */}
-      <div className="bg-white rounded-2xl p-3 shadow-sm border border-sky-50">
-        <p className="text-[11px] font-bold text-sky-600 mb-2 flex items-center gap-1">
+      <div className="bg-white rounded-2xl p-3 shadow-sm border border-indigo-50">
+        <p className="text-[11px] font-bold text-indigo-600 mb-2 flex items-center gap-1">
           <span>🏆</span> 이달의 가구
         </p>
-        <div className="divide-y divide-slate-50">
+        <div className="divide-y divide-violet-50">
           {furniture.length === 0 ? skeleton : furniture.map(f => (
             <button
               key={f.id}
               onClick={() => navigate(`/posts?category=${encodeURIComponent(f.category)}`)}
-              className="flex items-center gap-2 py-1.5 w-full text-left active:bg-sky-50 transition-colors rounded-lg"
+              className="flex items-center gap-2 py-1.5 w-full text-left active:bg-indigo-50 transition-colors rounded-lg"
             >
               <span className={`${RANK_COLORS[f.monthly_rank! - 1] ?? 'bg-slate-300'} text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0`}>
                 {f.monthly_rank}
@@ -63,7 +63,7 @@ export default function MonthlyRanking() {
               <img src={f.image_url} alt={f.name} className="w-8 h-8 rounded-lg object-cover flex-shrink-0" />
               <div className="min-w-0">
                 <p className="text-[11px] font-medium text-slate-700 leading-tight line-clamp-1">{f.name}</p>
-                <p className="text-[10px] text-sky-500 font-bold">{f.price.toLocaleString()}원</p>
+                <p className="text-[10px] text-indigo-500 font-bold">{f.price.toLocaleString()}원</p>
               </div>
             </button>
           ))}
@@ -71,16 +71,16 @@ export default function MonthlyRanking() {
       </div>
 
       {/* 인테리어 순위 */}
-      <div className="bg-white rounded-2xl p-3 shadow-sm border border-sky-50">
-        <p className="text-[11px] font-bold text-sky-600 mb-2 flex items-center gap-1">
+      <div className="bg-white rounded-2xl p-3 shadow-sm border border-indigo-50">
+        <p className="text-[11px] font-bold text-indigo-600 mb-2 flex items-center gap-1">
           <span>✨</span> 인테리어 순위
         </p>
-        <div className="divide-y divide-slate-50">
+        <div className="divide-y divide-violet-50">
           {interiorPosts.length === 0 ? skeleton : interiorPosts.map((p, i) => (
             <button
               key={p.id}
               onClick={() => navigate(`/posts/${p.id}`)}
-              className="flex items-center gap-2 py-1.5 w-full text-left active:bg-sky-50 transition-colors rounded-lg"
+              className="flex items-center gap-2 py-1.5 w-full text-left active:bg-indigo-50 transition-colors rounded-lg"
             >
               <span className={`${RANK_COLORS[i]} text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0`}>
                 {i + 1}

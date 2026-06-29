@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Header from '../components/layout/Header'
 import BottomTabNav from '../components/layout/BottomTabNav'
@@ -28,7 +28,7 @@ export default function PostCreatePage() {
         <div className="flex-1 flex flex-col items-center justify-center gap-4 px-6">
           <p className="text-4xl">🔐</p>
           <p className="font-semibold text-slate-700">로그인이 필요합니다</p>
-          <button onClick={() => navigate('/login')} className="px-6 py-3 bg-sky-500 text-white font-semibold rounded-xl">
+          <button onClick={() => navigate('/login')} className="px-6 py-3 bg-indigo-500 text-white font-semibold rounded-xl">
             로그인하러 가기
           </button>
         </div>
@@ -66,8 +66,8 @@ export default function PostCreatePage() {
       <main className="flex-1 page-content px-4">
         {/* 진행 상태 */}
         <div className="flex items-center gap-2 py-4">
-          <div className={`h-1 flex-1 rounded-full ${step >= 1 ? 'bg-sky-500' : 'bg-slate-200'}`} />
-          <div className={`h-1 flex-1 rounded-full ${step >= 2 ? 'bg-sky-500' : 'bg-slate-200'}`} />
+          <div className={`h-1 flex-1 rounded-full ${step >= 1 ? 'bg-indigo-500' : 'bg-violet-200'}`} />
+          <div className={`h-1 flex-1 rounded-full ${step >= 2 ? 'bg-indigo-500' : 'bg-violet-200'}`} />
         </div>
 
         {step === 1 ? (
@@ -82,8 +82,8 @@ export default function PostCreatePage() {
                     onClick={() => setRoomSize(size)}
                     className={`px-3 py-2 rounded-xl text-xs font-medium border transition-colors ${
                       roomSize === size
-                        ? 'bg-sky-500 text-white border-sky-500'
-                        : 'bg-white text-slate-600 border-slate-200'
+                        ? 'bg-indigo-500 text-white border-indigo-500'
+                        : 'bg-white text-slate-600 border-violet-200'
                     }`}
                   >
                     {label}
@@ -101,7 +101,7 @@ export default function PostCreatePage() {
                 onChange={e => setCaption(e.target.value)}
                 placeholder="인테리어 이야기를 공유해보세요! 어떤 가구를 사용했는지, 어떤 느낌을 원했는지 등..."
                 rows={5}
-                className="w-full p-4 border border-slate-200 rounded-2xl text-sm focus:outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-100 resize-none"
+                className="w-full p-4 border border-violet-200 rounded-2xl text-sm focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 resize-none"
               />
               <p className="text-slate-400 text-xs text-right mt-1">{caption.length} / 500</p>
             </div>
@@ -109,7 +109,7 @@ export default function PostCreatePage() {
             <button
               onClick={() => { setStep(2); loadPhotos() }}
               disabled={!caption.trim()}
-              className="w-full py-4 bg-sky-500 text-white font-bold rounded-2xl disabled:opacity-40 hover:bg-sky-600 transition-colors"
+              className="w-full py-4 bg-indigo-500 text-white font-bold rounded-2xl disabled:opacity-40 hover:bg-indigo-600 transition-colors"
             >
               다음: 이미지 선택
             </button>
@@ -122,7 +122,7 @@ export default function PostCreatePage() {
               <button
                 onClick={loadPhotos}
                 disabled={loadingPhotos}
-                className="flex items-center gap-1.5 text-xs text-sky-500 font-medium"
+                className="flex items-center gap-1.5 text-xs text-indigo-500 font-medium"
               >
                 <FiRefreshCw className={`w-3.5 h-3.5 ${loadingPhotos ? 'animate-spin' : ''}`} />
                 새로고침
@@ -139,13 +139,13 @@ export default function PostCreatePage() {
                     onClick={() => setSelectedPhoto(photo)}
                     className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all ${
                       selectedPhoto?.id === photo.id
-                        ? 'border-sky-500 scale-95'
+                        ? 'border-indigo-500 scale-95'
                         : 'border-transparent'
                     }`}
                   >
                     <img src={photo.urls.small} alt={photo.alt_description} className="w-full h-full object-cover" />
                     {selectedPhoto?.id === photo.id && (
-                      <div className="absolute inset-0 bg-sky-500/20 flex items-center justify-center">
+                      <div className="absolute inset-0 bg-indigo-500/20 flex items-center justify-center">
                         <span className="text-white text-2xl">✓</span>
                       </div>
                     )}
@@ -155,7 +155,7 @@ export default function PostCreatePage() {
             )}
 
             {selectedPhoto && (
-              <div className="bg-sky-50 rounded-2xl p-3 flex gap-3 items-center">
+              <div className="bg-indigo-50 rounded-2xl p-3 flex gap-3 items-center">
                 <img src={selectedPhoto.urls.thumb} alt="선택됨" className="w-12 h-12 rounded-xl object-cover" />
                 <div>
                   <p className="text-xs text-slate-500">선택된 이미지</p>
@@ -167,14 +167,14 @@ export default function PostCreatePage() {
             <div className="flex gap-3">
               <button
                 onClick={() => setStep(1)}
-                className="flex-1 py-4 bg-slate-100 text-slate-700 font-semibold rounded-2xl hover:bg-slate-200 transition-colors"
+                className="flex-1 py-4 bg-violet-100 text-slate-700 font-semibold rounded-2xl hover:bg-violet-200 transition-colors"
               >
                 이전
               </button>
               <button
                 onClick={handleSubmit}
                 disabled={!selectedPhoto || submitting}
-                className="flex-1 py-4 bg-sky-500 text-white font-bold rounded-2xl disabled:opacity-40 hover:bg-sky-600 transition-colors"
+                className="flex-1 py-4 bg-indigo-500 text-white font-bold rounded-2xl disabled:opacity-40 hover:bg-indigo-600 transition-colors"
               >
                 {submitting ? '올리는 중...' : '게시물 올리기'}
               </button>
