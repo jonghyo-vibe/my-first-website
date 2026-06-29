@@ -31,12 +31,14 @@ export default function HomePage() {
       <Header />
 
       <main className="flex-1 page-content">
-        {/* 히어로 + 순위 (좌: 순위 세로형, 우: 히어로) */}
+        {/* 히어로 - 전체 폭 */}
+        <section>
+          <HeroSection />
+        </section>
+
+        {/* 순위 */}
         <section className="px-4 pt-4 pb-2">
-          <div className="flex gap-3">
-            <MonthlyRanking />
-            <HeroSection />
-          </div>
+          <MonthlyRanking />
         </section>
 
         {/* 이벤트 배너 */}
