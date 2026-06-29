@@ -14,26 +14,45 @@ export default function LoginPage() {
   const [displayName, setDisplayName] = useState('')
   const [showPw, setShowPw] = useState(false)
   const [error, setError] = useState('')
+  const [info, setInfo] = useState('')
   const [loading, setLoading] = useState(false)
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError('')
+    setInfo('')
     setLoading(true)
-    const result = isLogin
-      ? await login(email, password)
-      : await register(email, password, displayName)
-    setLoading(false)
-    if (result.error) {
-      setError(result.error)
+
+    if (isLogin) {
+      const result = await login(email, password)
+      setLoading(false)
+      if (result.error) {
+        setError(result.error)
+      } else {
+        navigate('/')
+      }
     } else {
-      navigate('/')
+      if (password.length < 6) {
+        setError('비밀번호는 6자 이상이어야 합니다.')
+        setLoading(false)
+        return
+      }
+      const result = await register(email, password, displayName)
+      setLoading(false)
+      if (result.error) {
+        setError(result.error)
+      } else if (result.needsConfirm) {
+        setInfo(`${email}로 인증 메일을 발송했습니다.\n메일 확인 후 로그인해주세요.`)
+        setIsLogin(true)
+      } else {
+        navigate('/')
+      }
     }
   }
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
-      {/* 상단 일러스트 영역 */}
+      {/* 상단 헤더 */}
       <div className="bg-gradient-to-br from-sky-400 to-sky-600 h-48 flex flex-col items-center justify-center">
         <div className="text-center">
           <span className="text-4xl font-bold text-white">뷰</span>
@@ -43,10 +62,10 @@ export default function LoginPage() {
       </div>
 
       <div className="flex-1 px-6 pt-8">
-        {/* 탭 전환 */}
+        {/* 로그인 / 회원가입 탭 */}
         <div className="flex bg-slate-100 rounded-2xl p-1 mb-8">
           <button
-            onClick={() => setIsLogin(true)}
+            onClick={() => { setIsLogin(true); setError(''); setInfo('') }}
             className={`flex-1 py-2.5 text-sm font-semibold rounded-xl transition-all ${
               isLogin ? 'bg-white text-sky-600 shadow-sm' : 'text-slate-500'
             }`}
@@ -54,7 +73,7 @@ export default function LoginPage() {
             로그인
           </button>
           <button
-            onClick={() => setIsLogin(false)}
+            onClick={() => { setIsLogin(false); setError(''); setInfo('') }}
             className={`flex-1 py-2.5 text-sm font-semibold rounded-xl transition-all ${
               !isLogin ? 'bg-white text-sky-600 shadow-sm' : 'text-slate-500'
             }`}
@@ -69,14 +88,16 @@ export default function LoginPage() {
               <FiUser className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
               <input
                 type="text"
-                placeholder="닉네임"
+                placeholder="닉네임 (2자 이상)"
                 value={displayName}
                 onChange={e => setDisplayName(e.target.value)}
                 required={!isLogin}
+                minLength={2}
                 className="w-full pl-11 pr-4 py-3.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-100"
               />
             </div>
           )}
+
           <div className="relative">
             <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
             <input
@@ -88,11 +109,12 @@ export default function LoginPage() {
               className="w-full pl-11 pr-4 py-3.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-100"
             />
           </div>
+
           <div className="relative">
             <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
             <input
               type={showPw ? 'text' : 'password'}
-              placeholder="비밀번호"
+              placeholder={isLogin ? '비밀번호' : '비밀번호 (6자 이상)'}
               value={password}
               onChange={e => setPassword(e.target.value)}
               required
@@ -108,37 +130,38 @@ export default function LoginPage() {
           </div>
 
           {error && (
-            <p className="text-rose-500 text-sm bg-rose-50 px-4 py-2 rounded-xl">{error}</p>
+            <p className="text-rose-500 text-sm bg-rose-50 px-4 py-3 rounded-xl">{error}</p>
+          )}
+          {info && (
+            <p className="text-sky-600 text-sm bg-sky-50 px-4 py-3 rounded-xl whitespace-pre-line">{info}</p>
           )}
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-4 bg-sky-500 text-white font-bold rounded-xl hover:bg-sky-600 transition-colors disabled:opacity-50 text-sm"
+            className="w-full py-4 bg-sky-500 text-white font-bold rounded-xl hover:bg-sky-600 active:bg-sky-700 transition-colors disabled:opacity-50 text-sm"
           >
             {loading ? '처리 중...' : isLogin ? '로그인' : '회원가입'}
           </button>
         </form>
 
-        {/* 구분선 */}
+        {/* SNS 로그인 */}
         <div className="flex items-center gap-3 my-6">
           <div className="flex-1 h-px bg-slate-200" />
           <span className="text-slate-400 text-xs">또는 SNS로 계속하기</span>
           <div className="flex-1 h-px bg-slate-200" />
         </div>
-
-        {/* SNS 로그인 버튼 (둥근 원형, 가로 배치) */}
         <div className="flex items-center justify-center gap-4">
-          <button className="w-12 h-12 rounded-full bg-white border border-slate-200 flex items-center justify-center shadow-sm hover:shadow-md transition-shadow">
+          <button className="w-12 h-12 rounded-full bg-white border border-slate-200 flex items-center justify-center shadow-sm">
             <FaGoogle className="w-5 h-5 text-red-500" />
           </button>
-          <button className="w-12 h-12 rounded-full bg-[#FEE500] flex items-center justify-center shadow-sm hover:shadow-md transition-shadow">
+          <button className="w-12 h-12 rounded-full bg-[#FEE500] flex items-center justify-center shadow-sm">
             <SiKakaotalk className="w-5 h-5 text-[#3A1D1D]" />
           </button>
-          <button className="w-12 h-12 rounded-full bg-[#03C75A] flex items-center justify-center shadow-sm hover:shadow-md transition-shadow">
+          <button className="w-12 h-12 rounded-full bg-[#03C75A] flex items-center justify-center shadow-sm">
             <SiNaver className="w-4 h-4 text-white" />
           </button>
-          <button className="w-12 h-12 rounded-full bg-black flex items-center justify-center shadow-sm hover:shadow-md transition-shadow">
+          <button className="w-12 h-12 rounded-full bg-black flex items-center justify-center shadow-sm">
             <FaApple className="w-5 h-5 text-white" />
           </button>
         </div>

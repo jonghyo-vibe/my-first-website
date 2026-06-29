@@ -132,7 +132,7 @@ export default function MyPage() {
               <p className="text-slate-500 text-sm">{currentUser.email}</p>
               {currentUser.bio && <p className="text-slate-600 text-xs mt-0.5">{currentUser.bio}</p>}
             </div>
-            <button onClick={() => { logout(); navigate('/') }} className="flex items-center gap-1 text-slate-400 text-xs">
+            <button onClick={async () => { await logout(); navigate('/') }} className="flex items-center gap-1 text-slate-400 text-xs">
               <FiLogOut className="w-4 h-4" />
               로그아웃
             </button>

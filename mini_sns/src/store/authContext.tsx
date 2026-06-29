@@ -7,54 +7,85 @@ interface AuthContextType {
   currentUser: SnsUser | null
   loading: boolean
   login: (email: string, password: string) => Promise<{ error?: string }>
-  register: (email: string, password: string, displayName: string) => Promise<{ error?: string }>
-  logout: () => void
+  register: (email: string, password: string, displayName: string) => Promise<{ error?: string; needsConfirm?: boolean }>
+  logout: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | null>(null)
+
+async function fetchOrCreateProfile(userId: string, email: string, displayName?: string): Promise<SnsUser | null> {
+  const { data: existing } = await supabase.from('sns_users').select('*').eq('id', userId).single()
+  if (existing) return existing as SnsUser
+  if (!displayName) return null
+  const { data: created } = await supabase.from('sns_users')
+    .insert({ id: userId, email, display_name: displayName })
+    .select().single()
+  return (created ?? null) as SnsUser | null
+}
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [currentUser, setCurrentUser] = useState<SnsUser | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const stored = localStorage.getItem('sns_user')
-    if (stored) {
-      try { setCurrentUser(JSON.parse(stored)) } catch { /* ignore */ }
-    }
-    setLoading(false)
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
+      if (session?.user) {
+        const u = session.user
+        const profile = await fetchOrCreateProfile(u.id, u.email ?? '', u.user_metadata?.display_name)
+        setCurrentUser(profile)
+      }
+      setLoading(false)
+    })
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_IN' && session?.user) {
+        const u = session.user
+        const profile = await fetchOrCreateProfile(u.id, u.email ?? '', u.user_metadata?.display_name)
+        setCurrentUser(profile)
+      } else if (event === 'SIGNED_OUT') {
+        setCurrentUser(null)
+      }
+      setLoading(false)
+    })
+
+    return () => subscription.unsubscribe()
   }, [])
 
-  async function login(email: string, _password: string) {
-    const { data, error } = await supabase
-      .from('sns_users')
-      .select('*')
-      .eq('email', email)
-      .single()
-    if (error || !data) return { error: '이메일 또는 비밀번호가 올바르지 않습니다.' }
-    // 데모용: password 필드 없으므로 이메일 존재 여부만 확인
-    setCurrentUser(data)
-    localStorage.setItem('sns_user', JSON.stringify(data))
+  async function login(email: string, password: string): Promise<{ error?: string }> {
+    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    if (!error) return {}
+    if (error.message.includes('Invalid login credentials') || error.message.includes('invalid_credentials')) {
+      return { error: '이메일 또는 비밀번호가 올바르지 않습니다.' }
+    }
+    if (error.message.includes('Email not confirmed')) {
+      return { error: '이메일 인증이 필요합니다. 받은 편지함을 확인해주세요.' }
+    }
+    return { error: '로그인 중 오류가 발생했습니다.' }
+  }
+
+  async function register(email: string, password: string, displayName: string): Promise<{ error?: string; needsConfirm?: boolean }> {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { data: { display_name: displayName } },
+    })
+    if (error) {
+      if (error.message.includes('already registered') || error.message.includes('User already registered')) {
+        return { error: '이미 사용 중인 이메일입니다.' }
+      }
+      return { error: error.message }
+    }
+    // 이메일 확인 미완료 → 세션 없음
+    if (!data.session) return { needsConfirm: true }
+    // 즉시 로그인됨 → 프로필 생성
+    if (data.user) {
+      await fetchOrCreateProfile(data.user.id, email, displayName)
+    }
     return {}
   }
 
-  async function register(email: string, _password: string, displayName: string) {
-    const existing = await supabase.from('sns_users').select('id').eq('email', email).single()
-    if (existing.data) return { error: '이미 사용 중인 이메일입니다.' }
-    const { data, error } = await supabase
-      .from('sns_users')
-      .insert({ email, display_name: displayName })
-      .select()
-      .single()
-    if (error || !data) return { error: '회원가입 중 오류가 발생했습니다.' }
-    setCurrentUser(data)
-    localStorage.setItem('sns_user', JSON.stringify(data))
-    return {}
-  }
-
-  function logout() {
-    setCurrentUser(null)
-    localStorage.removeItem('sns_user')
+  async function logout() {
+    await supabase.auth.signOut()
   }
 
   return (
