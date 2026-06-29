@@ -54,16 +54,32 @@ jobs:
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
         run: npm run build
 
-      # ── 두 빌드 합치기 ──
+      # ── mini_sns 빌드 ──
+      - name: Install dependencies (mini_sns)
+        working-directory: mini_sns
+        run: npm install
+
+      - name: Build (mini_sns)
+        working-directory: mini_sns
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          VITE_UNSPLASH_ACCESS_KEY: ${{ secrets.VITE_UNSPLASH_ACCESS_KEY }}
+        run: npm run build
+
+      # ── 세 빌드 합치기 ──
       # GitHub Pages URL: https://jonghyo-vibe.github.io/my-first-website/
       #   my-community  → 루트 (base: /my-first-website/)
-      #   my-portfolio  → /my-portfolio/ 서브디렉토리 (base: /my-first-website/my-portfolio/)
+      #   my-portfolio  → /my-portfolio/ 서브디렉토리
+      #   mini_sns      → /mini_sns/ 서브디렉토리
       - name: Merge builds into site/
         run: |
           mkdir -p site
           cp -r lecture1/my-community/dist/.  site/
           mkdir -p site/my-portfolio
           cp -r lecture1/my-portfolio/dist/.  site/my-portfolio/
+          mkdir -p site/mini_sns
+          cp -r mini_sns/dist/.  site/mini_sns/
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
