@@ -11,7 +11,7 @@ const Navigation = () => {
   const { pathname } = useLocation()
 
   return (
-    <AppBar position="sticky" sx={{ background: '#FFFFFF', boxShadow: '0 1px 0 #B7E4C7' }}>
+    <AppBar position="sticky" sx={{ background: '#0A0A0A', boxShadow: '0 1px 0 #1E1E1E' }}>
       <Toolbar sx={{ maxWidth: 1100, width: '100%', mx: 'auto' }}>
         <Typography
           variant="h6"
