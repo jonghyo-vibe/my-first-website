@@ -81,6 +81,9 @@ jobs:
           mkdir -p site/mini_sns
           cp -r mini_sns/dist/.  site/mini_sns/
 
+      - name: Add SPA 404.html for GitHub Pages routing
+        run: cp site/my-portfolio/404.html site/404.html
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
