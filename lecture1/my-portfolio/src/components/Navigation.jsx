@@ -11,8 +11,13 @@ const Navigation = () => {
   const { pathname } = useLocation()
 
   return (
-    <AppBar position="sticky" sx={{ background: '#0A0A0A', boxShadow: '0 1px 0 #1E1E1E' }}>
-      <Toolbar sx={{ maxWidth: 1100, width: '100%', mx: 'auto' }}>
+    <AppBar position="sticky" sx={{
+      background: 'rgba(10,10,10,0.72)',
+      backdropFilter: 'blur(14px)',
+      WebkitBackdropFilter: 'blur(14px)',
+      boxShadow: '0 1px 0 rgba(30,30,30,0.7)',
+    }}>
+      <Toolbar sx={{ maxWidth: 1100, width: '100%', mx: 'auto', px: { xs: 2, md: 4 } }}>
         <Typography
           variant="h6"
           component={Link}
@@ -27,7 +32,7 @@ const Navigation = () => {
         >
           MY PORTFOLIO
         </Typography>
-        <Box sx={{ display: 'flex', gap: 1 }}>
+        <Box sx={{ display: 'flex', gap: 2 }}>
           {navItems.map(({ label, path }) => (
             <Button
               key={path}

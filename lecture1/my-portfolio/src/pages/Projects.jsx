@@ -433,15 +433,15 @@ const Projects = () => (
     <Box sx={{ textAlign: 'center', mb: { xs: 4, md: 6 } }}>
       <Typography
         variant="overline"
-        sx={{ color: 'var(--color-secondary-dark)', letterSpacing: 4, display: 'block', mb: 1 }}
+        sx={{ color: '#22C55E', letterSpacing: 4, display: 'block', mb: 1 }}
       >
         WORK
       </Typography>
-      <Typography variant="h2" sx={{ color: 'var(--color-text-primary)', mb: 1.5 }}>
+      <Typography variant="h2" sx={{ color: '#FFFFFF', mb: 1.5, fontWeight: 800 }}>
         Projects
       </Typography>
-      <Divider sx={{ mb: 2, borderColor: 'var(--color-accent-sage)', maxWidth: 60, mx: 'auto' }} />
-      <Typography variant="body1" sx={{ color: 'var(--color-text-muted)' }}>
+      <Divider sx={{ mb: 2, borderColor: '#22C55E', maxWidth: 60, mx: 'auto' }} />
+      <Typography variant="body1" sx={{ color: '#666666' }}>
         총 {PROJECTS.length}개의 프로젝트
       </Typography>
     </Box>
