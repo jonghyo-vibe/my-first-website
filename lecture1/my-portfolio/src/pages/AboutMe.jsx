@@ -1,45 +1,19 @@
 import { useState, useRef, useEffect } from 'react'
 import {
   Box, Typography, Chip, Avatar, Card, CardContent,
-  Divider, LinearProgress, Tooltip, Button,
+  Divider, LinearProgress, Tooltip, Button, TextField,
 } from '@mui/material'
-import SchoolIcon         from '@mui/icons-material/School'
-import WorkIcon           from '@mui/icons-material/Work'
-import PaletteIcon        from '@mui/icons-material/Palette'
-import HomeIcon           from '@mui/icons-material/Home'
-import AddAPhotoIcon      from '@mui/icons-material/AddAPhoto'
-import LanguageIcon       from '@mui/icons-material/Language'
-import FlashOnIcon        from '@mui/icons-material/FlashOn'
-import DataObjectIcon     from '@mui/icons-material/DataObject'
-import LoopIcon           from '@mui/icons-material/Loop'
-import DesignServicesIcon from '@mui/icons-material/DesignServices'
-import HubIcon            from '@mui/icons-material/Hub'
-import ChangeHistoryIcon  from '@mui/icons-material/ChangeHistory'
-import SmartphoneIcon     from '@mui/icons-material/Smartphone'
-import StorageIcon        from '@mui/icons-material/Storage'
-import TerminalIcon       from '@mui/icons-material/Terminal'
-import CodeIcon           from '@mui/icons-material/Code'
-import AccountTreeIcon    from '@mui/icons-material/AccountTree'
-import SortIcon           from '@mui/icons-material/Sort'
-import AddIcon            from '@mui/icons-material/Add'
+import SchoolIcon    from '@mui/icons-material/School'
+import WorkIcon      from '@mui/icons-material/Work'
+import PaletteIcon   from '@mui/icons-material/Palette'
+import HomeIcon      from '@mui/icons-material/Home'
+import AddAPhotoIcon from '@mui/icons-material/AddAPhoto'
+import SortIcon      from '@mui/icons-material/Sort'
+import AddIcon       from '@mui/icons-material/Add'
+import { usePortfolio, CAT_COLORS } from '../context/PortfolioContext'
 
-/* ══════════════════════════════════════
-   기본 정보 & 섹션 데이터
-══════════════════════════════════════ */
-const INIT_DATA = {
-  basicInfo: {
-    name: '김종효', education: '이리보고',
-    major: '예체능', experience: '신입', photo: '',
-  },
-  sections: [
-    { id: 'dev-story',  title: '나의 개발 스토리', showInHome: true,
-      content: '이전부터 계속 하고 싶다고 생각을 하다가 지금보다 더 늦어지면 안될 것 같아서 열심히 준비하였음' },
-    { id: 'philosophy', title: '개발 철학',         showInHome: true,
-      content: '메세지가 편안하게 들어와야 한다' },
-    { id: 'personal',   title: '개인적인 이야기',   showInHome: false,
-      content: 'AI에 관심, OTT 시청을 좋아함' },
-  ],
-}
+const CATEGORIES  = ['All', 'Frontend', 'Framework', 'Backend', 'Design', 'Tools']
+const DEFAULT_SHOW = 6
 
 const INFO_ITEMS = [
   { Icon: SchoolIcon,  key: 'education',  label: '학력' },
@@ -47,49 +21,14 @@ const INFO_ITEMS = [
   { Icon: WorkIcon,    key: 'experience', label: '경력' },
 ]
 
-/* ══════════════════════════════════════
-   스킬 데이터
-══════════════════════════════════════ */
-const CAT_COLORS = {
-  Frontend:  '#22C55E',
-  Framework: '#38BDF8',
-  Backend:   '#A78BFA',
-  Design:    '#F472B6',
-  Tools:     '#FBB724',
-}
-
-const ALL_SKILLS = [
-  { id: 1,  Icon: LanguageIcon,       name: 'HTML',         level: 80, category: 'Frontend',  tooltip: '시맨틱 마크업, 웹 표준 준수' },
-  { id: 2,  Icon: PaletteIcon,        name: 'CSS',          level: 75, category: 'Frontend',  tooltip: 'Flexbox, Grid, 트랜지션 애니메이션' },
-  { id: 3,  Icon: FlashOnIcon,        name: 'JavaScript',   level: 70, category: 'Frontend',  tooltip: 'ES6+, 비동기 처리, DOM 조작' },
-  { id: 4,  Icon: DataObjectIcon,     name: 'TypeScript',   level: 65, category: 'Frontend',  tooltip: '타입 시스템, 인터페이스 설계' },
-  { id: 5,  Icon: HubIcon,            name: 'Vue.js',       level: 40, category: 'Frontend',  tooltip: '컴포넌트 기반 프레임워크' },
-  { id: 6,  Icon: ChangeHistoryIcon,  name: 'Angular',      level: 30, category: 'Frontend',  tooltip: 'TypeScript 기반 SPA 프레임워크' },
-  { id: 7,  Icon: LoopIcon,           name: 'React',        level: 60, category: 'Framework', tooltip: '컴포넌트 기반 UI 개발, Hooks' },
-  { id: 8,  Icon: SmartphoneIcon,     name: 'React Native', level: 35, category: 'Framework', tooltip: '크로스 플랫폼 모바일 앱 개발' },
-  { id: 9,  Icon: StorageIcon,        name: 'Supabase',     level: 55, category: 'Framework', tooltip: 'BaaS, 실시간 DB, Auth 연동' },
-  { id: 10, Icon: TerminalIcon,       name: 'Node.js',      level: 45, category: 'Backend',   tooltip: 'REST API, 서버사이드 개발' },
-  { id: 11, Icon: CodeIcon,           name: 'Python',       level: 40, category: 'Backend',   tooltip: '데이터 처리, 스크립팅' },
-  { id: 12, Icon: CodeIcon,           name: 'Java',         level: 30, category: 'Backend',   tooltip: '객체지향 프로그래밍 기초' },
-  { id: 13, Icon: StorageIcon,        name: 'MongoDB',      level: 38, category: 'Backend',   tooltip: 'NoSQL 도큐먼트 데이터베이스' },
-  { id: 14, Icon: DesignServicesIcon, name: 'Figma',        level: 65, category: 'Design',    tooltip: 'UI/UX 디자인, 프로토타이핑' },
-  { id: 15, Icon: AccountTreeIcon,    name: 'Git',          level: 70, category: 'Tools',     tooltip: '버전 관리, 브랜치 전략, 협업' },
-]
-
-const CATEGORIES = ['All', 'Frontend', 'Framework', 'Backend', 'Design', 'Tools']
-const DEFAULT_SHOW = 6
-
 /* ── 스킬 카드 ── */
 function SkillCard({ skill, visible, index }) {
   const color = CAT_COLORS[skill.category] ?? '#22C55E'
   return (
     <Tooltip title={skill.tooltip} placement="top" arrow>
       <Box sx={{
-        bgcolor: '#0A0A0A',
-        border: '1px solid #1E1E1E',
-        borderRadius: 2,
-        p: 2,
-        cursor: 'default',
+        bgcolor: '#0A0A0A', border: '1px solid #1E1E1E',
+        borderRadius: 2, p: 2, cursor: 'default',
         opacity: visible ? 1 : 0,
         transform: visible ? 'translateY(0)' : 'translateY(20px)',
         transition: `opacity 0.45s ease ${index * 0.05}s, transform 0.45s ease ${index * 0.05}s, border-color 0.2s, box-shadow 0.2s`,
@@ -133,11 +72,11 @@ function SkillCard({ skill, visible, index }) {
 }
 
 /* ── 스킬 섹션 ── */
-function SkillsSection() {
-  const [cat, setCat]           = useState('All')
+function SkillsSection({ skills }) {
+  const [cat, setCat]             = useState('All')
   const [sortLevel, setSortLevel] = useState(false)
   const [showCount, setShowCount] = useState(DEFAULT_SHOW)
-  const [visible, setVisible]   = useState(false)
+  const [visible, setVisible]     = useState(false)
   const ref = useRef(null)
 
   useEffect(() => {
@@ -151,10 +90,10 @@ function SkillsSection() {
     return () => obs.disconnect()
   }, [])
 
-  let filtered = ALL_SKILLS.filter(s => cat === 'All' || s.category === cat)
+  let filtered = skills.filter(s => cat === 'All' || s.category === cat)
   if (sortLevel) filtered = [...filtered].sort((a, b) => b.level - a.level)
-  const displayed   = filtered.slice(0, showCount)
-  const remaining   = filtered.length - showCount
+  const displayed = filtered.slice(0, showCount)
+  const remaining = filtered.length - showCount
 
   const handleCatChange = (c) => { setCat(c); setShowCount(DEFAULT_SHOW) }
 
@@ -169,7 +108,6 @@ function SkillsSection() {
       }}
     >
       <CardContent sx={{ p: { xs: 2.5, md: 3 } }}>
-        {/* 헤더 */}
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1.5, mb: 2.5 }}>
           <Box>
             <Typography sx={{ fontSize: 9, fontWeight: 700, letterSpacing: 3, color: '#666', textTransform: 'uppercase', mb: 0.3 }}>
@@ -188,8 +126,7 @@ function SkillsSection() {
               borderColor: '#22C55E',
               color: sortLevel ? '#000' : '#22C55E',
               bgcolor: sortLevel ? '#22C55E' : 'transparent',
-              border: '1px solid #22C55E',
-              borderRadius: 1.5,
+              border: '1px solid #22C55E', borderRadius: 1.5,
               '&:hover': { bgcolor: sortLevel ? '#16A34A' : 'rgba(34,197,94,0.08)' },
             }}
           >
@@ -197,7 +134,6 @@ function SkillsSection() {
           </Button>
         </Box>
 
-        {/* 카테고리 필터 */}
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.8, mb: 2.5 }}>
           {CATEGORIES.map(c => {
             const active = cat === c
@@ -222,7 +158,6 @@ function SkillsSection() {
 
         <Divider sx={{ borderColor: '#1E1E1E', mb: 2.5 }} />
 
-        {/* 스킬 그리드 */}
         <Box sx={{
           display: 'grid',
           gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr' },
@@ -233,7 +168,6 @@ function SkillsSection() {
           ))}
         </Box>
 
-        {/* 스킬 추가 / 접기 버튼 */}
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2.5, gap: 1 }}>
           {remaining > 0 && (
             <Button
@@ -272,16 +206,29 @@ function SkillsSection() {
    메인 컴포넌트
 ══════════════════════════════════════ */
 export default function AboutMe() {
-  const [data]      = useState(INIT_DATA)
-  const [photoUrl, setPhotoUrl] = useState('')
+  const { aboutMeData, setAboutMeData } = usePortfolio()
   const fileInputRef = useRef(null)
+
+  const { basicInfo, sections, skills } = aboutMeData
+
+  const updateSection = (id, newContent) => {
+    setAboutMeData(prev => ({
+      ...prev,
+      sections: prev.sections.map(s =>
+        s.id === id ? { ...s, content: newContent } : s
+      ),
+    }))
+  }
 
   const handlePhotoChange = (e) => {
     const file = e.target.files?.[0]
-    if (file) setPhotoUrl(URL.createObjectURL(file))
+    if (!file) return
+    const url = URL.createObjectURL(file)
+    setAboutMeData(prev => ({
+      ...prev,
+      basicInfo: { ...prev.basicInfo, photo: url },
+    }))
   }
-
-  const { basicInfo, sections } = data
 
   return (
     <Box sx={{
@@ -307,25 +254,22 @@ export default function AboutMe() {
             <Box sx={{
               display: 'grid',
               gridTemplateColumns: { xs: '1fr', sm: 'auto 1fr' },
-              gap: { xs: 3, sm: 4 },
-              alignItems: 'center',
+              gap: { xs: 3, sm: 4 }, alignItems: 'center',
             }}>
-              {/* 프로필 사진 업로드 */}
               <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
                 <Box
                   onClick={() => fileInputRef.current?.click()}
                   sx={{ position: 'relative', cursor: 'pointer', '&:hover .photo-overlay': { opacity: 1 } }}
                 >
                   <Avatar
-                    src={photoUrl}
+                    src={basicInfo.photo}
                     sx={{
-                      width: 120, height: 120,
-                      bgcolor: '#1A1A1A',
+                      width: 120, height: 120, bgcolor: '#1A1A1A',
                       border: '2px solid #1E1E1E',
                       fontSize: '2.5rem', fontWeight: 700, color: '#22C55E',
                     }}
                   >
-                    {!photoUrl && basicInfo.name[0]}
+                    {!basicInfo.photo && basicInfo.name[0]}
                   </Avatar>
                   <Box className="photo-overlay" sx={{
                     position: 'absolute', inset: 0, borderRadius: '50%',
@@ -342,7 +286,6 @@ export default function AboutMe() {
                 <input ref={fileInputRef} type="file" accept="image/*" hidden onChange={handlePhotoChange} />
               </Box>
 
-              {/* 이름 + 정보 */}
               <Box>
                 <Typography sx={{
                   fontSize: { xs: '2rem', md: '2.8rem' },
@@ -377,7 +320,7 @@ export default function AboutMe() {
           </CardContent>
         </Card>
 
-        {/* ── 콘텐츠 섹션 카드들 ── */}
+        {/* ── 콘텐츠 섹션 카드들 (편집 가능) ── */}
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mb: 0 }}>
           {sections.map((section) => (
             <Card key={section.id} sx={{
@@ -404,16 +347,30 @@ export default function AboutMe() {
                   )}
                 </Box>
                 <Divider sx={{ borderColor: '#1E1E1E', mb: 2 }} />
-                <Typography sx={{ fontSize: 14, color: '#CCCCCC', lineHeight: 1.9 }}>
-                  {section.content}
-                </Typography>
+                <TextField
+                  multiline
+                  minRows={2}
+                  fullWidth
+                  value={section.content}
+                  onChange={(e) => updateSection(section.id, e.target.value)}
+                  placeholder="내용을 입력하세요..."
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      color: '#CCCCCC', fontSize: 14, lineHeight: 1.9,
+                      '& fieldset': { borderColor: '#1E1E1E' },
+                      '&:hover fieldset': { borderColor: '#333' },
+                      '&.Mui-focused fieldset': { borderColor: '#22C55E' },
+                    },
+                    '& .MuiOutlinedInput-input': { py: 1 },
+                  }}
+                />
               </CardContent>
             </Card>
           ))}
         </Box>
 
         {/* ── 스킬 섹션 ── */}
-        <SkillsSection />
+        <SkillsSection skills={skills} />
 
       </Box>
     </Box>
