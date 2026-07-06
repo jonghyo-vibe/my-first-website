@@ -406,16 +406,29 @@ function SkillsPreview() {
                     p: 2.5, textAlign: 'center',
                     display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1.2,
                     opacity: visible ? 1 : 0,
-                    transition: `opacity 0.5s ease ${i * 0.1}s, border-color 0.2s, box-shadow 0.2s`,
+                    transition: `opacity 0.5s ease ${i * 0.1}s, border-color 0.25s, box-shadow 0.25s, transform 0.25s ease`,
                     cursor: 'default',
-                    '&:hover': { borderColor: color, boxShadow: `0 0 16px ${color}33` },
+                    willChange: 'transform',
+                    '&:hover': {
+                      borderColor: color,
+                      boxShadow: `0 0 22px ${color}44, 0 8px 32px rgba(0,0,0,0.5)`,
+                      transform: 'perspective(600px) rotateY(-6deg) translateY(-6px) scale(1.04)',
+                    },
+                    '&:hover .skill-icon-box': {
+                      backgroundColor: `${color}30`,
+                      transform: 'rotate(12deg) scale(1.15)',
+                    },
                   }}
                 >
-                  <Box sx={{
-                    width: 46, height: 46, borderRadius: 2,
-                    bgcolor: `${color}18`,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  }}>
+                  <Box
+                    className="skill-icon-box"
+                    sx={{
+                      width: 46, height: 46, borderRadius: 2,
+                      bgcolor: `${color}18`,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      transition: 'transform 0.3s ease, background-color 0.3s ease',
+                    }}
+                  >
                     <skill.Icon sx={{ fontSize: 22, color }} />
                   </Box>
                   <Typography sx={{ fontSize: 13, fontWeight: 700, color: C.white }}>

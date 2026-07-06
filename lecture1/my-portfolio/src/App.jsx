@@ -5,10 +5,12 @@ import Home from './pages/Home'
 import AboutMe from './pages/AboutMe'
 import Projects from './pages/Projects'
 import ContactSection from './components/ContactSection'
+import CursorGlow from './components/CursorGlow'
 
 function App() {
   return (
     <PortfolioProvider>
+      <CursorGlow />
       <BrowserRouter basename="/my-first-website/my-portfolio">
         <Navigation />
         <Routes>

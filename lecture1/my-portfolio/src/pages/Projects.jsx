@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import {
   Box, Typography, Chip, Card, CardContent,
-  Button, Stack, Divider,
+  Button, Stack, Divider, Tooltip,
 } from '@mui/material'
 import BlurText from '../components/BlurText'
 import GitHubIcon from '@mui/icons-material/GitHub'
@@ -14,6 +14,18 @@ import SignalCellularAltIcon from '@mui/icons-material/SignalCellularAlt'
 import SmartphoneIcon from '@mui/icons-material/Smartphone'
 import TabletIcon from '@mui/icons-material/Tablet'
 import DesktopWindowsIcon from '@mui/icons-material/DesktopWindows'
+
+const TECH_TOOLTIPS = {
+  'React':        'UI 컴포넌트 라이브러리',
+  'TypeScript':   '정적 타입 JavaScript',
+  'Supabase':     'BaaS — 인증·DB·스토리지',
+  'MUI':          'Material Design 컴포넌트',
+  'Vite':         '차세대 프론트엔드 빌드 도구',
+  'React Router': 'SPA 클라이언트 라우팅',
+  'Tailwind CSS': '유틸리티 퍼스트 CSS 프레임워크',
+  'CSS Modules':  '컴포넌트 범위 격리 CSS',
+  'Storybook':    'UI 컴포넌트 개발·문서화 도구',
+}
 
 const getBadgeStyle = (label) => {
   const map = {
@@ -178,7 +190,47 @@ const PROJECTS = [
 ]
 
 const ProjectCard = ({ project }) => {
-  const [pressed, setPressed] = useState(false)
+  const [pressed,  setPressed]  = useState(false)
+  const [hovered,  setHovered]  = useState(false)
+  const [tilt,     setTilt]     = useState({ x: 0, y: 0 })
+  const [ripple,   setRipple]   = useState(null)
+  const cardRef = useRef(null)
+
+  const spawnRipple = useCallback((clientX, clientY) => {
+    if (!cardRef.current) return
+    const r = cardRef.current.getBoundingClientRect()
+    const key = Date.now()
+    setRipple({ x: clientX - r.left, y: clientY - r.top, key })
+    setTimeout(() => setRipple(null), 750)
+  }, [])
+
+  const handleMouseMove = useCallback((e) => {
+    if (!cardRef.current) return
+    const r = cardRef.current.getBoundingClientRect()
+    const cx = (e.clientX - r.left) / r.width  - 0.5
+    const cy = (e.clientY - r.top)  / r.height - 0.5
+    setTilt({ x: cy * -12, y: cx * 12 })
+  }, [])
+
+  const handleMouseEnter = useCallback((e) => {
+    setHovered(true)
+    spawnRipple(e.clientX, e.clientY)
+  }, [spawnRipple])
+
+  const handleMouseLeave = useCallback(() => {
+    setHovered(false)
+    setTilt({ x: 0, y: 0 })
+  }, [])
+
+  const handleTouchStart = useCallback((e) => {
+    const t = e.touches[0]
+    setHovered(true)
+    spawnRipple(t.clientX, t.clientY)
+  }, [spawnRipple])
+
+  const handleTouchEnd = useCallback(() => {
+    setTimeout(() => { setHovered(false); setTilt({ x: 0, y: 0 }) }, 400)
+  }, [])
 
   const handleGithubClick = (e) => {
     e.stopPropagation()
@@ -193,7 +245,19 @@ const ProjectCard = ({ project }) => {
 
   return (
     <Card
+      ref={cardRef}
       onClick={handleCardClick}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      style={{
+        transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) translateY(${hovered ? '-8px' : '0'}) scale(${hovered ? 1.02 : 1})`,
+        boxShadow: hovered
+          ? '0 24px 60px rgba(34,197,94,0.28), 0 8px 24px rgba(0,0,0,0.5)'
+          : '0 2px 12px rgba(0,0,0,0.25)',
+      }}
       sx={{
         height: '100%',
         display: 'flex',
@@ -201,20 +265,11 @@ const ProjectCard = ({ project }) => {
         borderRadius: 3,
         overflow: 'hidden',
         border: '1px solid',
-        borderColor: 'var(--color-border-default)',
+        borderColor: hovered ? 'rgba(34,197,94,0.45)' : 'var(--color-border-default)',
         bgcolor: 'var(--color-bg-secondary)',
         cursor: project.github ? 'pointer' : 'default',
-        transition: 'transform 0.3s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s ease',
-        '&:hover': {
-          transform: 'translateY(-6px) scale(1.02)',
-          boxShadow: '0 20px 48px rgba(34,197,94,0.22)',
-        },
-        '&:hover .card-img': {
-          transform: 'scale(1.08)',
-        },
-        '&:hover .card-link-hint': {
-          opacity: 1,
-        },
+        transition: 'border-color 0.3s ease',
+        willChange: 'transform',
       }}
     >
       {/* ── 디바이스 목업 이미지 영역 ── */}
@@ -226,23 +281,25 @@ const ProjectCard = ({ project }) => {
             position: 'relative', width: '100%', pt: '56.25%',
             overflow: 'hidden', bgcolor: '#0d1b2a', flexShrink: 0,
           }}>
-            {/* 상단 바 */}
             {cfg.renderTopBar()}
 
-            {/* 이미지 */}
+            {/* 이미지 — JS 상태 기반 줌 + 필터 */}
             <Box
               component="img"
               src={project.image}
               alt={project.name}
               loading="lazy"
-              className="card-img"
               sx={{
                 position: 'absolute',
                 top: topH, left: 0,
                 width: '100%',
                 height: `calc(100% - ${topH}px)`,
                 objectFit: 'cover',
-                transition: 'transform 0.4s cubic-bezier(0.4,0,0.2,1)',
+              }}
+              style={{
+                transform: hovered ? 'scale(1.1)' : 'scale(1)',
+                filter: hovered ? 'brightness(0.7) saturate(1.3)' : 'brightness(1)',
+                transition: 'transform 0.45s cubic-bezier(0.4,0,0.2,1), filter 0.4s ease',
               }}
             />
 
@@ -253,14 +310,35 @@ const ProjectCard = ({ project }) => {
               background: 'linear-gradient(to top, rgba(0,0,0,0.45) 0%, transparent 100%)',
             }} />
 
-            {/* 호버 시 링크 이동 힌트 */}
+            {/* 리플 이펙트 */}
+            {ripple && (
+              <Box
+                key={ripple.key}
+                sx={{
+                  position: 'absolute',
+                  left: ripple.x - 14,
+                  top: ripple.y - 14,
+                  width: 28, height: 28,
+                  borderRadius: '50%',
+                  background: 'rgba(34,197,94,0.45)',
+                  pointerEvents: 'none',
+                  zIndex: 6,
+                  '@keyframes ripple-expand': {
+                    '0%':   { transform: 'scale(1)', opacity: 0.8 },
+                    '100%': { transform: 'scale(22)', opacity: 0 },
+                  },
+                  animation: 'ripple-expand 0.75s ease-out forwards',
+                }}
+              />
+            )}
+
+            {/* 호버 오버레이 */}
             <Box
-              className="card-link-hint"
               sx={{
                 position: 'absolute', inset: 0, zIndex: 4,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 bgcolor: 'rgba(0,0,0,0.35)',
-                opacity: 0,
+                opacity: hovered && project.github ? 1 : 0,
                 transition: 'opacity 0.25s ease',
               }}
             >
@@ -278,7 +356,6 @@ const ProjectCard = ({ project }) => {
               </Box>
             </Box>
 
-            {/* 하단 바 (홈 인디케이터 등) */}
             {cfg.renderBottomBar()}
 
             {/* 디바이스 타입 뱃지 */}
@@ -333,28 +410,55 @@ const ProjectCard = ({ project }) => {
 
         {/* 기술 스택 */}
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.8 }}>
-          {/* 아이콘형 */}
+          {/* 아이콘형 — 글로우 + 아이콘 회전 + 툴팁 */}
           <Stack direction="row" flexWrap="wrap" gap={0.6}>
             {project.techIcons.map(({ label, Icon }) => {
               const s = getBadgeStyle(label)
               return (
-                <Chip
+                <Tooltip
                   key={label}
-                  icon={<Icon sx={{ fontSize: 14, color: s.color }} />}
-                  label={label}
-                  size="small"
-                  sx={{
-                    fontSize: 11, height: 22,
-                    bgcolor: s.bg, color: s.color,
-                    fontWeight: 600,
-                    border: 'none',
+                  title={TECH_TOOLTIPS[label] || label}
+                  arrow
+                  placement="top"
+                  componentsProps={{
+                    tooltip: {
+                      sx: {
+                        bgcolor: '#1A1A1A',
+                        border: `1px solid ${s.color}44`,
+                        borderRadius: 1.5,
+                        fontSize: 11,
+                        color: s.color,
+                      },
+                    },
+                    arrow: { sx: { color: '#1A1A1A' } },
                   }}
-                />
+                >
+                  <Chip
+                    icon={<Icon sx={{ fontSize: 14, color: s.color }} />}
+                    label={label}
+                    size="small"
+                    sx={{
+                      fontSize: 11, height: 22,
+                      bgcolor: s.bg, color: s.color,
+                      fontWeight: 600,
+                      border: 'none',
+                      cursor: 'default',
+                      willChange: 'transform, box-shadow',
+                      transition: 'transform 0.2s ease, box-shadow 0.25s ease',
+                      '& .MuiChip-icon': { transition: 'transform 0.5s ease' },
+                      '&:hover': {
+                        transform: 'scale(1.12)',
+                        boxShadow: `0 0 10px ${s.color}88, 0 0 22px ${s.color}33`,
+                      },
+                      '&:hover .MuiChip-icon': { transform: 'rotate(360deg)' },
+                    }}
+                  />
+                </Tooltip>
               )
             })}
           </Stack>
 
-          {/* 뱃지형 */}
+          {/* 뱃지형 — 글로우 */}
           <Stack direction="row" flexWrap="wrap" gap={0.6}>
             {project.techBadges.map((label) => {
               const s = getBadgeStyle(label)
@@ -369,6 +473,13 @@ const ProjectCard = ({ project }) => {
                     borderColor: s.color,
                     color: s.color,
                     fontWeight: 500,
+                    cursor: 'default',
+                    transition: 'transform 0.2s ease, box-shadow 0.25s ease, background-color 0.2s ease',
+                    '&:hover': {
+                      transform: 'scale(1.06)',
+                      bgcolor: `${s.color}18`,
+                      boxShadow: `0 0 8px ${s.color}55`,
+                    },
                   }}
                 />
               )
