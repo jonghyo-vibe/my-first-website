@@ -124,7 +124,7 @@ const PROJECTS = [
     description: '인테리어의 혁신',
     device: 'mobile',
     image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=640&h=360&fit=crop&q=80',
-    github: 'https://github.com/jonghyo-vibe',
+    github: '',
     techIcons: [
       { label: 'React', Icon: CodeIcon },
       { label: 'TypeScript', Icon: SpeedIcon },
@@ -139,7 +139,7 @@ const PROJECTS = [
     description: '나만의 개발 이야기',
     device: 'desktop',
     image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=640&h=360&fit=crop&q=80',
-    github: 'https://github.com/jonghyo-vibe',
+    github: '',
     techIcons: [
       { label: 'React', Icon: CodeIcon },
       { label: 'MUI', Icon: BrushIcon },
@@ -153,7 +153,7 @@ const PROJECTS = [
     description: '재사용 가능한 UI 모음',
     device: 'desktop',
     image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=640&h=360&fit=crop&q=80',
-    github: 'https://github.com/jonghyo-vibe',
+    github: '',
     techIcons: [
       { label: 'React', Icon: CodeIcon },
     ],
@@ -166,7 +166,7 @@ const PROJECTS = [
     description: '소통하는 인테리어 커뮤니티',
     device: 'tablet',
     image: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=640&h=360&fit=crop&q=80',
-    github: 'https://github.com/jonghyo-vibe',
+    github: '',
     techIcons: [
       { label: 'React', Icon: CodeIcon },
       { label: 'Supabase', Icon: StorageIcon },
@@ -187,7 +187,7 @@ const ProjectCard = ({ project }) => {
   }
 
   const handleCardClick = () => {
-    window.open(project.github, '_blank', 'noopener,noreferrer')
+    if (project.github) window.open(project.github, '_blank', 'noopener,noreferrer')
   }
 
   return (
@@ -202,7 +202,7 @@ const ProjectCard = ({ project }) => {
         border: '1px solid',
         borderColor: 'var(--color-border-default)',
         bgcolor: 'var(--color-bg-secondary)',
-        cursor: 'pointer',
+        cursor: project.github ? 'pointer' : 'default',
         transition: 'transform 0.3s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s ease',
         '&:hover': {
           transform: 'translateY(-6px) scale(1.02)',
@@ -390,32 +390,34 @@ const ProjectCard = ({ project }) => {
           </Typography>
         </Box>
 
-        {/* GitHub 버튼 */}
-        <Box sx={{ mt: 'auto', pt: 0.5 }}>
-          <Button
-            variant="outlined"
-            size="small"
-            startIcon={<GitHubIcon sx={{ fontSize: '16px !important' }} />}
-            onClick={handleGithubClick}
-            fullWidth
-            sx={{
-              borderColor: 'var(--color-primary)',
-              color: 'var(--color-primary)',
-              fontWeight: 600,
-              fontSize: 12,
-              py: 0.7,
-              transform: pressed ? 'scale(0.93)' : 'scale(1)',
-              transition: 'transform 0.15s cubic-bezier(0.4,0,0.2,1), background-color 0.2s, color 0.2s',
-              '&:hover': {
-                bgcolor: 'var(--color-primary)',
-                color: '#fff',
+        {/* GitHub 버튼 — 링크 있을 때만 표시 */}
+        {project.github && (
+          <Box sx={{ mt: 'auto', pt: 0.5 }}>
+            <Button
+              variant="outlined"
+              size="small"
+              startIcon={<GitHubIcon sx={{ fontSize: '16px !important' }} />}
+              onClick={handleGithubClick}
+              fullWidth
+              sx={{
                 borderColor: 'var(--color-primary)',
-              },
-            }}
-          >
-            GitHub
-          </Button>
-        </Box>
+                color: 'var(--color-primary)',
+                fontWeight: 600,
+                fontSize: 12,
+                py: 0.7,
+                transform: pressed ? 'scale(0.93)' : 'scale(1)',
+                transition: 'transform 0.15s cubic-bezier(0.4,0,0.2,1), background-color 0.2s, color 0.2s',
+                '&:hover': {
+                  bgcolor: 'var(--color-primary)',
+                  color: '#fff',
+                  borderColor: 'var(--color-primary)',
+                },
+              }}
+            >
+              GitHub
+            </Button>
+          </Box>
+        )}
       </CardContent>
     </Card>
   )
