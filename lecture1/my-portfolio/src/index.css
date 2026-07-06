@@ -1,39 +1,39 @@
 :root {
-  /* Primary — 그린 */
-  --color-primary:       #22C55E;
-  --color-primary-light: #4ADE80;
-  --color-primary-dark:  #16A34A;
+  /* Primary — 연한 초록 계열 */
+  --color-primary:       #52B788;
+  --color-primary-light: #74C69D;
+  --color-primary-dark:  #40916C;
 
-  /* Secondary — 스카이 블루 */
-  --color-secondary:       #38BDF8;
-  --color-secondary-light: #1a2a1a;
-  --color-secondary-dark:  #0EA5E9;
-  --color-accent:          #22C55E;
-  --color-accent-sage:     #22C55E;
+  /* Secondary */
+  --color-secondary:       #95D5B2;
+  --color-secondary-light: #D8F3DC;
+  --color-secondary-dark:  #52B788;
+  --color-accent:          #40916C;
+  --color-accent-sage:     #B7E4C7;
 
   /* Background */
-  --color-bg-primary:   #0A0A0A;
-  --color-bg-secondary: #111111;
-  --color-bg-surface:   #1A1A1A;
+  --color-bg-primary:   #F4FAF0;
+  --color-bg-secondary: #FFFFFF;
+  --color-bg-surface:   #EAF4EA;
 
   /* Text */
-  --color-text-primary:   #FFFFFF;
-  --color-text-secondary: #CCCCCC;
-  --color-text-muted:     #666666;
+  --color-text-primary:   #1B4332;
+  --color-text-secondary: #2D6A4F;
+  --color-text-muted:     #52796F;
 
   /* Interactive */
-  --color-button-primary:  #22C55E;
-  --color-button-hover:    #16A34A;
-  --color-button-active:   #15803D;
-  --color-button-disabled: #333333;
-  --color-link:            #22C55E;
-  --color-link-hover:      #4ADE80;
-  --color-link-visited:    #22C55E;
-  --color-focus-ring:      #22C55E;
+  --color-button-primary:  #52B788;
+  --color-button-hover:    #40916C;
+  --color-button-active:   #2D6A4F;
+  --color-button-disabled: #B7B7B7;
+  --color-link:            #40916C;
+  --color-link-hover:      #2D6A4F;
+  --color-link-visited:    #52B788;
+  --color-focus-ring:      #95D5B2;
 
   /* Border */
-  --color-border-default: #1E1E1E;
-  --color-border-glow:    #22C55E;
+  --color-border-default: #B7E4C7;
+  --color-border-glow:    #52B788;
 }
 
 * {
