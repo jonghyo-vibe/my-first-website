@@ -48,11 +48,11 @@ const INIT_DATA = {
   },
   sections: [
     { id: 'dev-story',  title: '나의 개발 스토리', showInHome: true,
-      content: '이전부터 계속 하고 싶다고 생각을 하다가 지금보다 더 늦어지면 안될 것 같아서 열심히 준비하였음' },
+      content: '웹사이트가 만들어지는 과정이 궁금해서 개발을 시작했습니다. 직접 만들고 싶다는 생각에 공부를 시작했고, 앞으로 더 성장해 1인 창업을 목표로 준비하고 있습니다.' },
     { id: 'philosophy', title: '개발 철학',         showInHome: true,
-      content: '메세지가 편안하게 들어와야 한다' },
+      content: '사용자가 메시지를 편안하게 받아들일 수 있는 서비스를 만드는 것이 중요하다고 생각합니다.' },
     { id: 'personal',   title: '개인적인 이야기',   showInHome: false,
-      content: 'AI에 관심, OTT 시청을 좋아함' },
+      content: 'AI 서비스와 도구에 관심이 많고, OTT 콘텐츠 시청을 즐깁니다.' },
   ],
   skills: INIT_SKILLS,
 }
