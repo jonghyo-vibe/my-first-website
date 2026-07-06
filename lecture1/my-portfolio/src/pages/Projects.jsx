@@ -139,7 +139,7 @@ const PROJECTS = [
     name: '그린 포트폴리오',
     description: '나만의 개발 이야기',
     device: 'desktop',
-    image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=640&h=360&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=640&h=360&fit=crop&q=80',
     github: '',
     techIcons: [
       { label: 'React', Icon: CodeIcon },
@@ -153,7 +153,7 @@ const PROJECTS = [
     name: 'UI 컴포넌트',
     description: '재사용 가능한 UI 모음',
     device: 'desktop',
-    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=640&h=360&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=640&h=360&fit=crop&q=80',
     github: '',
     techIcons: [
       { label: 'React', Icon: CodeIcon },
