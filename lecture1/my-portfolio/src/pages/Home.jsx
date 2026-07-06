@@ -6,6 +6,8 @@ import WorkIcon         from '@mui/icons-material/Work'
 import PaletteIcon      from '@mui/icons-material/Palette'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import ContactSection from '../components/ContactSection'
+import ShinyText from '../components/ShinyText'
+import BlurText  from '../components/BlurText'
 import { usePortfolio, CAT_COLORS } from '../context/PortfolioContext'
 
 const C = {
@@ -107,7 +109,13 @@ export default function Home() {
               fontFamily: SYNE, fontSize: { xs: '0.85rem', md: '1.1rem' },
               color: C.green, letterSpacing: 6, fontWeight: 600, textTransform: 'uppercase',
             }}>
-              Growth Marketer
+              <ShinyText
+                text="Growth Marketer"
+                color={C.green}
+                shineColor="#ffffff"
+                speed={4}
+                spread={100}
+              />
             </Typography>
           </Box>
         </Box>
@@ -171,7 +179,7 @@ export default function Home() {
               fontSize: { xs: '2rem', sm: '2.8rem', md: '3.4rem' },
               fontWeight: 800, color: C.white, lineHeight: 1.15, letterSpacing: -1, mb: 1,
             }}>
-              {basicInfo.name}
+              <BlurText text={basicInfo.name} delay={120} animateBy="chars" direction="bottom" threshold={0.1} />
             </Typography>
             <Box sx={{ width: 60, height: 3, bgcolor: C.green, mb: 3, borderRadius: 2 }} />
 

@@ -3,6 +3,7 @@ import {
   Box, Typography, Chip, Card, CardContent,
   Button, Stack, Divider,
 } from '@mui/material'
+import BlurText from '../components/BlurText'
 import GitHubIcon from '@mui/icons-material/GitHub'
 import CodeIcon from '@mui/icons-material/Code'
 import StorageIcon from '@mui/icons-material/Storage'
@@ -441,7 +442,7 @@ const Projects = () => (
         WORK
       </Typography>
       <Typography variant="h2" sx={{ color: '#FFFFFF', mb: 1.5, fontWeight: 800 }}>
-        Projects
+        <BlurText text="Projects" delay={100} animateBy="chars" direction="bottom" threshold={0.2} />
       </Typography>
       <Divider sx={{ mb: 2, borderColor: '#22C55E', maxWidth: 60, mx: 'auto' }} />
       <Typography variant="body1" sx={{ color: '#666666' }}>

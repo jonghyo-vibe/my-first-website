@@ -7,6 +7,7 @@ import {
 import InstagramIcon   from '@mui/icons-material/Instagram'
 import { QRCodeSVG }   from 'qrcode.react'
 import { supabase }    from '../lib/supabase'
+import BlurText        from './BlurText'
 
 const PORTFOLIO_URL = 'https://jonghyo-vibe.github.io/my-first-website/my-portfolio/'
 
@@ -71,8 +72,8 @@ const ContactSection = () => {
         >
           CONTACT
         </Typography>
-        <Typography variant="h2" sx={{ color: 'var(--color-text-primary)', mb: 1, textAlign: 'center' }}>
-          Contact
+        <Typography variant="h2" sx={{ color: 'var(--color-text-primary)', mb: 1, textAlign: 'center', display: 'flex', justifyContent: 'center' }}>
+          <BlurText text="Contact" delay={100} animateBy="chars" direction="bottom" threshold={0.2} />
         </Typography>
         <Divider sx={{ mb: 6, borderColor: 'var(--color-border-glow)', maxWidth: 80, mx: 'auto' }} />
 
