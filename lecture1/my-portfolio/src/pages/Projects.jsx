@@ -123,7 +123,7 @@ const PROJECTS = [
     id: 1,
     name: '뷰테리어',
     description: '인테리어의 혁신',
-    device: 'mobile',
+    device: 'desktop',
     image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=640&h=360&fit=crop&q=80',
     github: '',
     techIcons: [
@@ -135,10 +135,24 @@ const PROJECTS = [
     techTexts: ['React Router DOM', 'Unsplash API'],
   },
   {
+    id: 4,
+    name: '미니 SNS',
+    description: '소통하는 인테리어 커뮤니티',
+    device: 'desktop',
+    image: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=640&h=360&fit=crop&q=80',
+    github: '',
+    techIcons: [
+      { label: 'React', Icon: CodeIcon },
+      { label: 'Supabase', Icon: StorageIcon },
+    ],
+    techBadges: ['TypeScript', 'Tailwind CSS'],
+    techTexts: ['React Router', 'Unsplash API'],
+  },
+  {
     id: 2,
     name: '그린 포트폴리오',
     description: '나만의 개발 이야기',
-    device: 'desktop',
+    device: 'tablet',
     image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=640&h=360&fit=crop&q=80',
     github: '',
     techIcons: [
@@ -152,7 +166,7 @@ const PROJECTS = [
     id: 3,
     name: 'UI 컴포넌트',
     description: '재사용 가능한 UI 모음',
-    device: 'desktop',
+    device: 'mobile',
     image: 'https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=640&h=360&fit=crop&q=80',
     github: '',
     techIcons: [
@@ -160,20 +174,6 @@ const PROJECTS = [
     ],
     techBadges: ['CSS Modules', 'Storybook'],
     techTexts: ['Vite', 'ESLint', 'Prettier'],
-  },
-  {
-    id: 4,
-    name: '미니 SNS',
-    description: '소통하는 인테리어 커뮤니티',
-    device: 'tablet',
-    image: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=640&h=360&fit=crop&q=80',
-    github: '',
-    techIcons: [
-      { label: 'React', Icon: CodeIcon },
-      { label: 'Supabase', Icon: StorageIcon },
-    ],
-    techBadges: ['TypeScript', 'Tailwind CSS'],
-    techTexts: ['React Router', 'Unsplash API'],
   },
 ]
 
