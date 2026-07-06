@@ -23,9 +23,7 @@ const greenField = {
 }
 
 const INIT_FORM = {
-  name: '', message: '', email: '', phone: '',
-  sns: '', organization: '', region: '', age_group: '',
-  how_found: '', keyword: '', rating: 0,
+  name: '', email: '', how_found: '', rating: 0, message: '',
 }
 
 const ContactSection = () => {
@@ -215,30 +213,7 @@ const ContactSection = () => {
               <TextField fullWidth label="이메일"
                 value={form.email} onChange={set('email')} sx={greenField} />
 
-              <TextField fullWidth label="전화번호"
-                value={form.phone} onChange={set('phone')} sx={greenField} />
-
-              <TextField fullWidth label="SNS 계정 (예: @username)"
-                value={form.sns} onChange={set('sns')} sx={greenField} />
-
-              <TextField fullWidth label="소속 / 직업"
-                value={form.organization} onChange={set('organization')} sx={greenField} />
-
-              <FormControl fullWidth sx={greenField}>
-                <InputLabel>나이대</InputLabel>
-                <Select value={form.age_group} label="나이대" onChange={set('age_group')}
-                  MenuProps={{ PaperProps: { sx: { background: '#111111' } } }}
-                >
-                  {['10대', '20대', '30대', '40대', '50대 이상'].map((a) => (
-                    <MenuItem key={a} value={a}>{a}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-
-              <TextField fullWidth label="거주 지역 (시 / 도)"
-                value={form.region} onChange={set('region')} sx={greenField} />
-
-              <FormControl fullWidth sx={greenField}>
+              <FormControl fullWidth sx={{ ...greenField, gridColumn: { xs: '1', sm: '1 / -1' } }}>
                 <InputLabel>어떻게 알게 되었나요?</InputLabel>
                 <Select value={form.how_found} label="어떻게 알게 되었나요?" onChange={set('how_found')}
                   MenuProps={{ PaperProps: { sx: { background: '#111111' } } }}
@@ -249,11 +224,8 @@ const ContactSection = () => {
                 </Select>
               </FormControl>
 
-              <TextField fullWidth label="한마디 키워드 (예: 천재, 멋있다)"
-                value={form.keyword} onChange={set('keyword')} sx={greenField} />
-
               {/* 별점 */}
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, pl: 1 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, pl: 1, gridColumn: '1 / -1' }}>
                 <Typography sx={{ color: 'var(--color-text-muted)', mr: 1, fontSize: '0.9rem' }}>
                   별점
                 </Typography>
@@ -267,7 +239,7 @@ const ContactSection = () => {
                       cursor: 'pointer',
                       fontSize: '2rem',
                       lineHeight: 1,
-                      color: star <= (hover || form.rating) ? '#F4A623' : '#D8E8D8',
+                      color: star <= (hover || form.rating) ? '#F4A623' : '#3A3A3A',
                       transition: 'color 0.15s',
                       userSelect: 'none',
                     }}
