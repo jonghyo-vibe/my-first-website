@@ -29,8 +29,7 @@ const INFO_ITEMS = [
 
 /* ────────────────────────────────────────── */
 export default function Home() {
-  const { getHomeData }  = usePortfolio()
-  const homeData         = getHomeData()
+  const { homeData }     = usePortfolio()
   const storySection     = homeData.content[0]
   const { basicInfo }    = homeData
 
@@ -296,8 +295,8 @@ export default function Home() {
 
 /* ── 주요 스킬 프리뷰 섹션 ── */
 function SkillsPreview() {
-  const { getHomeData }   = usePortfolio()
-  const { topSkills }     = getHomeData()
+  const { homeData }      = usePortfolio()
+  const { topSkills }     = homeData
   const ref               = useRef(null)
   const [visible, setVisible] = useState(false)
 

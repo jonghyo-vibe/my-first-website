@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, memo, useCallback } from 'react'
 import {
   Box, Typography, Chip, Avatar, Card, CardContent,
   Divider, LinearProgress, Tooltip, Button, TextField,
@@ -21,8 +21,8 @@ const INFO_ITEMS = [
   { Icon: WorkIcon,    key: 'experience', label: '경력' },
 ]
 
-/* ── 스킬 카드 ── */
-function SkillCard({ skill, visible, index }) {
+/* ── 스킬 카드 (memo: skill/visible/index 바뀔 때만 리렌더) ── */
+const SkillCard = memo(function SkillCard({ skill, visible, index }) {
   const color = CAT_COLORS[skill.category] ?? '#22C55E'
   return (
     <Tooltip title={skill.tooltip} placement="top" arrow>
@@ -69,10 +69,10 @@ function SkillCard({ skill, visible, index }) {
       </Box>
     </Tooltip>
   )
-}
+})
 
 /* ── 스킬 섹션 ── */
-function SkillsSection({ skills }) {
+const SkillsSection = memo(function SkillsSection({ skills }) {
   const [cat, setCat]             = useState('All')
   const [sortLevel, setSortLevel] = useState(false)
   const [showCount, setShowCount] = useState(DEFAULT_SHOW)
@@ -200,27 +200,36 @@ function SkillsSection({ skills }) {
       </CardContent>
     </Card>
   )
-}
+})
 
 /* ══════════════════════════════════════
    메인 컴포넌트
 ══════════════════════════════════════ */
 export default function AboutMe() {
   const { aboutMeData, setAboutMeData } = usePortfolio()
-  const fileInputRef = useRef(null)
+  const fileInputRef  = useRef(null)
+  const [toast, setToast] = useState(false)
 
   const { basicInfo, sections, skills } = aboutMeData
 
-  const updateSection = (id, newContent) => {
+  const updateSection = useCallback((id, newContent) => {
     setAboutMeData(prev => ({
       ...prev,
       sections: prev.sections.map(s =>
         s.id === id ? { ...s, content: newContent } : s
       ),
     }))
-  }
+    // showInHome 섹션 편집 시 토스트 표시
+    setToast(true)
+  }, [setAboutMeData])
 
-  const handlePhotoChange = (e) => {
+  useEffect(() => {
+    if (!toast) return
+    const t = setTimeout(() => setToast(false), 2000)
+    return () => clearTimeout(t)
+  }, [toast])
+
+  const handlePhotoChange = useCallback((e) => {
     const file = e.target.files?.[0]
     if (!file) return
     const url = URL.createObjectURL(file)
@@ -228,9 +237,10 @@ export default function AboutMe() {
       ...prev,
       basicInfo: { ...prev.basicInfo, photo: url },
     }))
-  }
+  }, [setAboutMeData])
 
   return (
+    <>
     <Box sx={{
       minHeight: 'calc(100vh - 64px)',
       bgcolor: '#0A0A0A',
@@ -374,5 +384,28 @@ export default function AboutMe() {
 
       </Box>
     </Box>
+
+    {/* ── 홈 반영 토스트 ── */}
+    <Box
+      role="status"
+      aria-live="polite"
+      sx={{
+        position: 'fixed', bottom: 28, right: 28, zIndex: 1300,
+        display: 'flex', alignItems: 'center', gap: 1,
+        bgcolor: 'rgba(10,10,10,0.9)',
+        border: '1px solid rgba(34,197,94,0.45)',
+        borderRadius: 2, px: 2, py: 1,
+        pointerEvents: 'none',
+        opacity: toast ? 1 : 0,
+        transform: toast ? 'translateY(0)' : 'translateY(12px)',
+        transition: 'opacity 0.3s ease, transform 0.3s ease',
+      }}
+    >
+      <Box sx={{ width: 7, height: 7, borderRadius: '50%', bgcolor: '#22C55E', flexShrink: 0 }} />
+      <Typography sx={{ fontSize: 12, color: '#22C55E', fontWeight: 600 }}>
+        홈에 반영됨
+      </Typography>
+    </Box>
+    </>
   )
 }

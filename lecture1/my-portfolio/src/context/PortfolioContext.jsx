@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useState, useMemo, useCallback } from 'react'
 import LanguageIcon       from '@mui/icons-material/Language'
 import PaletteIcon        from '@mui/icons-material/Palette'
 import FlashOnIcon        from '@mui/icons-material/FlashOn'
@@ -60,7 +60,8 @@ const INIT_DATA = {
 export function PortfolioProvider({ children }) {
   const [aboutMeData, setAboutMeData] = useState(INIT_DATA)
 
-  const getHomeData = () => {
+  // aboutMeData가 바뀔 때만 재계산
+  const homeData = useMemo(() => {
     const content = aboutMeData.sections
       .filter(s => s.showInHome)
       .map(s => ({
@@ -73,10 +74,12 @@ export function PortfolioProvider({ children }) {
       .sort((a, b) => b.level - a.level)
       .slice(0, 4)
     return { content, topSkills, basicInfo: aboutMeData.basicInfo }
-  }
+  }, [aboutMeData])
+
+  const getHomeData = useCallback(() => homeData, [homeData])
 
   return (
-    <PortfolioContext.Provider value={{ aboutMeData, setAboutMeData, getHomeData }}>
+    <PortfolioContext.Provider value={{ aboutMeData, setAboutMeData, homeData, getHomeData }}>
       {children}
     </PortfolioContext.Provider>
   )

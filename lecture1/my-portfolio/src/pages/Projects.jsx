@@ -233,6 +233,7 @@ const ProjectCard = ({ project }) => {
               component="img"
               src={project.image}
               alt={project.name}
+              loading="lazy"
               className="card-img"
               sx={{
                 position: 'absolute',
