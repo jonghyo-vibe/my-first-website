@@ -197,9 +197,9 @@ export default function Home() {
                 component={Link} to="/projects"
                 variant="outlined"
                 sx={{
-                  borderColor: C.border, color: `${C.sub} !important`,
-                  fontWeight: 600, px: 4, py: 1.5, borderRadius: 2, fontFamily: SYNE, fontSize: 14,
-                  '&:hover': { borderColor: C.sky, color: `${C.sky} !important`, bgcolor: 'rgba(56,189,248,0.05)' },
+                  borderColor: C.sky, color: `${C.sky} !important`,
+                  fontWeight: 700, px: 4, py: 1.5, borderRadius: 2, fontFamily: SYNE, fontSize: 14,
+                  '&:hover': { bgcolor: 'rgba(56,189,248,0.12)', borderColor: C.sky },
                 }}
               >
                 포트폴리오 보기
