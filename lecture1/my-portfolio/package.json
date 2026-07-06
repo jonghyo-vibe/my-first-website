@@ -17,6 +17,7 @@
     "@mui/material": "^9.1.1",
     "@supabase/supabase-js": "^2.108.2",
     "motion": "^12.42.2",
+    "ogl": "^1.0.11",
     "qrcode.react": "^4.2.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",

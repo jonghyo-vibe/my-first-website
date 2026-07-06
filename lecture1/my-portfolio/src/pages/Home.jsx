@@ -6,8 +6,11 @@ import WorkIcon         from '@mui/icons-material/Work'
 import PaletteIcon      from '@mui/icons-material/Palette'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import ContactSection from '../components/ContactSection'
-import ShinyText from '../components/ShinyText'
-import BlurText  from '../components/BlurText'
+import ShinyText     from '../components/ShinyText'
+import BlurText      from '../components/BlurText'
+import RotatingText  from '../components/RotatingText'
+import CountUp       from '../components/CountUp'
+import Particles     from '../components/Particles'
 import { usePortfolio, CAT_COLORS } from '../context/PortfolioContext'
 
 const C = {
@@ -109,12 +112,13 @@ export default function Home() {
               fontFamily: SYNE, fontSize: { xs: '0.85rem', md: '1.1rem' },
               color: C.green, letterSpacing: 6, fontWeight: 600, textTransform: 'uppercase',
             }}>
-              <ShinyText
-                text="Growth Marketer"
-                color={C.green}
-                shineColor="#ffffff"
-                speed={4}
-                spread={100}
+              <RotatingText
+                texts={['Growth Marketer', 'Frontend Dev', 'Web Creator']}
+                rotationInterval={2500}
+                staggerDuration={0.04}
+                initial={{ y: '100%', opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: '-120%', opacity: 0 }}
               />
             </Typography>
           </Box>
@@ -323,15 +327,18 @@ function SkillsPreview() {
     <Box
       ref={ref}
       sx={{
+        position: 'relative',
         bgcolor: C.surface,
         borderTop: `1px solid ${C.border}`,
         borderBottom: `1px solid ${C.border}`,
         py: 6, px: { xs: 3, md: 8 },
+        overflow: 'hidden',
         opacity: visible ? 1 : 0,
         transform: visible ? 'translateY(0)' : 'translateY(30px)',
         transition: 'opacity 0.7s ease, transform 0.7s ease',
       }}
     >
+      <Particles particleCount={80} particleSpread={8} speed={0.05} particleBaseSize={60} />
       <Box sx={{ maxWidth: 1100, mx: 'auto' }}>
         <Typography sx={{
           fontSize: 10, fontWeight: 700, letterSpacing: 4,
@@ -415,7 +422,7 @@ function SkillsPreview() {
                     {skill.name}
                   </Typography>
                   <Typography sx={{ fontSize: 13, fontWeight: 800, color }}>
-                    {skill.level}%
+                    <CountUp to={skill.level} duration={1.5} delay={i * 0.1} />%
                   </Typography>
                 </Box>
               </Tooltip>
