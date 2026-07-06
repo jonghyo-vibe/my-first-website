@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
-import { Box, Typography, Button, Stack, Avatar } from '@mui/material'
+import { Box, Typography, Button, Stack, Avatar, Tooltip, LinearProgress } from '@mui/material'
 import { Link } from 'react-router-dom'
 import SchoolIcon       from '@mui/icons-material/School'
 import WorkIcon         from '@mui/icons-material/Work'
@@ -342,31 +342,76 @@ function SkillsPreview() {
           {topSkills.map((skill, i) => {
             const color = CAT_COLORS[skill.category] ?? C.green
             return (
-              <Box
+              <Tooltip
                 key={skill.id}
-                sx={{
-                  bgcolor: C.bg, border: `1px solid ${C.border}`, borderRadius: 2,
-                  p: 2.5, textAlign: 'center',
-                  display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1.2,
-                  opacity: visible ? 1 : 0,
-                  transition: `opacity 0.5s ease ${i * 0.1}s`,
-                  '&:hover': { borderColor: color, boxShadow: `0 0 16px ${color}22` },
+                placement="top"
+                arrow
+                title={
+                  <Box sx={{ p: 0.5, minWidth: 170 }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                      <Typography sx={{ fontSize: 13, fontWeight: 700, color: '#fff' }}>
+                        {skill.name}
+                      </Typography>
+                      <Typography sx={{ fontSize: 13, fontWeight: 800, color }}>
+                        {skill.level}%
+                      </Typography>
+                    </Box>
+                    <LinearProgress
+                      variant="determinate"
+                      value={skill.level}
+                      sx={{
+                        height: 6, borderRadius: 3,
+                        bgcolor: 'rgba(255,255,255,0.1)',
+                        '& .MuiLinearProgress-bar': {
+                          borderRadius: 3,
+                          background: `linear-gradient(90deg, ${color}88, ${color})`,
+                        },
+                      }}
+                    />
+                    <Typography sx={{ fontSize: 10, color, mt: 0.8, letterSpacing: 1, textTransform: 'uppercase' }}>
+                      {skill.category}
+                    </Typography>
+                  </Box>
+                }
+                componentsProps={{
+                  tooltip: {
+                    sx: {
+                      bgcolor: '#1A1A1A',
+                      border: `1px solid ${color}44`,
+                      borderRadius: 2,
+                      boxShadow: `0 4px 20px rgba(0,0,0,0.5)`,
+                      p: 1.5,
+                    },
+                  },
+                  arrow: { sx: { color: '#1A1A1A' } },
                 }}
               >
-                <Box sx={{
-                  width: 46, height: 46, borderRadius: 2,
-                  bgcolor: `${color}18`,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                }}>
-                  <skill.Icon sx={{ fontSize: 22, color }} />
+                <Box
+                  sx={{
+                    bgcolor: C.bg, border: `1px solid ${C.border}`, borderRadius: 2,
+                    p: 2.5, textAlign: 'center',
+                    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1.2,
+                    opacity: visible ? 1 : 0,
+                    transition: `opacity 0.5s ease ${i * 0.1}s, border-color 0.2s, box-shadow 0.2s`,
+                    cursor: 'default',
+                    '&:hover': { borderColor: color, boxShadow: `0 0 16px ${color}33` },
+                  }}
+                >
+                  <Box sx={{
+                    width: 46, height: 46, borderRadius: 2,
+                    bgcolor: `${color}18`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}>
+                    <skill.Icon sx={{ fontSize: 22, color }} />
+                  </Box>
+                  <Typography sx={{ fontSize: 13, fontWeight: 700, color: C.white }}>
+                    {skill.name}
+                  </Typography>
+                  <Typography sx={{ fontSize: 13, fontWeight: 800, color }}>
+                    {skill.level}%
+                  </Typography>
                 </Box>
-                <Typography sx={{ fontSize: 13, fontWeight: 700, color: C.white }}>
-                  {skill.name}
-                </Typography>
-                <Typography sx={{ fontSize: 13, fontWeight: 800, color }}>
-                  {skill.level}%
-                </Typography>
-              </Box>
+              </Tooltip>
             )
           })}
         </Box>
