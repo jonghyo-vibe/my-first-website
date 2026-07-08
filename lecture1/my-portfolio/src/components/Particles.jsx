@@ -75,8 +75,16 @@ export default function Particles({
     const container = containerRef.current
     if (!container) return
 
-    const renderer = new Renderer({ dpr: window.devicePixelRatio, depth: false, alpha: true })
-    const gl = renderer.gl
+    const testCanvas = document.createElement('canvas')
+    if (!testCanvas.getContext('webgl') && !testCanvas.getContext('webgl2')) return
+
+    let renderer, gl
+    try {
+      renderer = new Renderer({ dpr: window.devicePixelRatio, depth: false, alpha: true })
+      gl = renderer.gl
+    } catch (e) {
+      return
+    }
     container.appendChild(gl.canvas)
     gl.clearColor(0, 0, 0, 0)
 
@@ -145,8 +153,8 @@ export default function Particles({
     return () => {
       cancelAnimationFrame(raf)
       window.removeEventListener('resize', resize)
-      if (container.contains(gl.canvas)) container.removeChild(gl.canvas)
-      gl.getExtension('WEBGL_lose_context')?.loseContext()
+      if (gl?.canvas && container.contains(gl.canvas)) container.removeChild(gl.canvas)
+      gl?.getExtension('WEBGL_lose_context')?.loseContext()
     }
   }, [])
 
