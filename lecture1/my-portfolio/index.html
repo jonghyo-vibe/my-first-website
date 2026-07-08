@@ -5,6 +5,16 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JONGHYO VIBE — Portfolio</title>
+    <!-- 다크모드 깜빡임 방지: React 렌더 전에 테마를 HTML 속성으로 설정 -->
+    <script>
+      (function () {
+        var s;
+        try { s = localStorage.getItem('portfolio-theme'); } catch (e) {}
+        var dark = s ? s === 'dark'
+          : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+      })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />

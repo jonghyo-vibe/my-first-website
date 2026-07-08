@@ -8,20 +8,23 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import ContactSection from '../components/ContactSection'
 import ShinyText     from '../components/ShinyText'
 import BlurText      from '../components/BlurText'
-import RotatingText  from '../components/RotatingText'
+import MultiLineTyper from '../components/MultiLineTyper'
+import TextMorph      from '../components/TextMorph'
 import CountUp       from '../components/CountUp'
 import Particles     from '../components/Particles'
+import TypeWriter    from '../components/TypeWriter'
+import { useScrollY } from '../hooks/useScrollAnimation'
 import { usePortfolio, CAT_COLORS } from '../context/PortfolioContext'
 
 const C = {
-  bg:      '#0A0A0A',
-  surface: '#111111',
-  border:  '#1E1E1E',
-  green:   '#22C55E',
-  sky:     '#38BDF8',
-  white:   '#FFFFFF',
-  muted:   '#666666',
-  sub:     '#999999',
+  bg:      'var(--c-bg)',
+  surface: 'var(--c-surface)',
+  border:  'var(--c-border)',
+  green:   'var(--c-green)',
+  sky:     'var(--c-sky)',
+  white:   'var(--c-text)',
+  muted:   'var(--c-muted)',
+  sub:     'var(--c-sub)',
 }
 
 const SYNE = "'Syne', sans-serif"
@@ -38,15 +41,9 @@ export default function Home() {
   const storySection     = homeData.content[0]
   const { basicInfo }    = homeData
 
-  const [scrollY, setScrollY]       = useState(0)
-  const infoRef                     = useRef(null)
+  const scrollY                       = useScrollY()   // rAF throttle 적용
+  const infoRef                       = useRef(null)
   const [infoVisible, setInfoVisible] = useState(false)
-
-  useEffect(() => {
-    const onScroll = () => setScrollY(window.scrollY)
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
 
   useEffect(() => {
     const el = infoRef.current
@@ -102,7 +99,8 @@ export default function Home() {
           <Typography sx={{
             fontFamily: SYNE,
             fontSize: { xs: '4.5rem', sm: '7rem', md: '10rem' },
-            fontWeight: 800, color: C.white, letterSpacing: -4, lineHeight: 0.9, textTransform: 'uppercase',
+            fontWeight: 800, letterSpacing: -4, lineHeight: 0.9, textTransform: 'uppercase',
+            color: '#FFFFFF',
           }}>
             JONGHYO
           </Typography>
@@ -112,17 +110,47 @@ export default function Home() {
               fontFamily: SYNE, fontSize: { xs: '0.85rem', md: '1.1rem' },
               color: C.green, letterSpacing: 6, fontWeight: 600, textTransform: 'uppercase',
             }}>
-              <RotatingText
-                texts={['Growth Marketer', 'Frontend Dev', 'Web Creator']}
-                rotationInterval={2500}
-                staggerDuration={0.04}
-                initial={{ y: '100%', opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: '-120%', opacity: 0 }}
+              <MultiLineTyper
+                phrases={['Growth Marketer', 'Frontend Dev', 'Web Creator']}
+                typeSpeed={75}
+                deleteSpeed={40}
+                holdMs={2000}
               />
             </Typography>
           </Box>
         </Box>
+
+        {/* 패럴랙스 레이어 1 — 느린 원형 (scrollY * 0.12) */}
+        <Box sx={{
+          position: 'absolute', top: '18%', right: '12%',
+          width: 180, height: 180, borderRadius: '50%',
+          border: '1px solid rgba(34,197,94,0.08)',
+          transform: `translate3d(0, ${scrollY * 0.12}px, 0)`,
+          willChange: 'transform', pointerEvents: 'none',
+        }} />
+        <Box sx={{
+          position: 'absolute', top: '22%', right: '14%',
+          width: 100, height: 100, borderRadius: '50%',
+          border: '1px solid rgba(34,197,94,0.06)',
+          transform: `translate3d(0, ${scrollY * 0.18}px, 0)`,
+          willChange: 'transform', pointerEvents: 'none',
+        }} />
+
+        {/* 패럴랙스 레이어 2 — 중간 속도 사각형 (scrollY * 0.22) */}
+        <Box sx={{
+          position: 'absolute', bottom: '30%', left: '8%',
+          width: 48, height: 48,
+          border: '1px solid rgba(56,189,248,0.12)',
+          transform: `translate3d(0, ${scrollY * 0.22}px, 0) rotate(${scrollY * 0.04}deg)`,
+          willChange: 'transform', pointerEvents: 'none',
+        }} />
+        <Box sx={{
+          position: 'absolute', top: '35%', left: '5%',
+          width: 6, height: 6, borderRadius: '50%',
+          bgcolor: C.green, opacity: 0.4,
+          transform: `translate3d(0, ${scrollY * 0.3}px, 0)`,
+          willChange: 'transform', pointerEvents: 'none',
+        }} />
 
         <Box sx={{
           position: 'absolute', bottom: 28, right: { xs: 24, md: 48 },
@@ -164,7 +192,7 @@ export default function Home() {
           <Box>
             <Box sx={{
               display: 'inline-flex', alignItems: 'center', gap: 1,
-              border: `1px solid ${C.border}`, borderRadius: 5, px: 2, py: 0.6, mb: 4, bgcolor: '#111',
+              border: `1px solid ${C.border}`, borderRadius: 5, px: 2, py: 0.6, mb: 4, bgcolor: 'var(--c-surface)',
             }}>
               <Box sx={{ width: 6, height: 6, borderRadius: '50%', bgcolor: C.green, animation: 'pulse 2s infinite' }} />
               <Typography sx={{ fontSize: 10, color: C.sub, letterSpacing: 3, fontFamily: SYNE }}>
@@ -176,7 +204,11 @@ export default function Home() {
               fontFamily: SYNE, fontSize: 11, fontWeight: 700,
               color: C.green, letterSpacing: 4, textTransform: 'uppercase', mb: 1,
             }}>
-              {storySection?.title ?? '나의 개발 스토리'}
+              <TypeWriter
+                text={storySection?.title ?? '나의 개발 스토리'}
+                speed={60}
+                delay={400}
+              />
             </Typography>
             <Typography sx={{
               fontFamily: SYNE,
@@ -185,7 +217,20 @@ export default function Home() {
             }}>
               <BlurText text={basicInfo.name} delay={120} animateBy="chars" direction="bottom" threshold={0.1} />
             </Typography>
-            <Box sx={{ width: 60, height: 3, bgcolor: C.green, mb: 3, borderRadius: 2 }} />
+            <Box sx={{ width: 60, height: 3, bgcolor: C.green, mb: 2, borderRadius: 2 }} />
+
+            {/* 텍스트 모핑 — 글자 단위 블러 전환 */}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 3 }}>
+              <Typography sx={{ color: C.muted, fontSize: { xs: 13, md: 15 } }}>나는</Typography>
+              <Typography component="span" sx={{
+                fontFamily: SYNE, fontWeight: 800,
+                fontSize: { xs: '1.1rem', md: '1.25rem' },
+                color: C.sky,
+              }}>
+                <TextMorph words={['개발자', '디자이너', '크리에이터']} interval={2200} />
+              </Typography>
+              <Typography sx={{ color: C.muted, fontSize: { xs: 13, md: 15 } }}>입니다</Typography>
+            </Box>
 
             <Typography sx={{
               fontSize: { xs: 14, md: 16 }, color: C.muted, lineHeight: 2, mb: 5, maxWidth: 520,
@@ -228,14 +273,14 @@ export default function Home() {
               opacity: infoVisible ? 1 : 0,
               transform: infoVisible ? 'translateX(0)' : 'translateX(40px)',
               transition: 'opacity 0.7s ease 0.2s, transform 0.7s ease 0.2s, border-color 0.3s, box-shadow 0.3s',
-              '&:hover': { borderColor: C.green, boxShadow: `0 0 24px ${C.green}18` },
+              '&:hover': { borderColor: C.green, boxShadow: '0 0 24px rgba(34,197,94,0.09)' },
             }}
           >
             <Avatar
               src={basicInfo.photo}
               sx={{
                 width: 88, height: 88,
-                bgcolor: '#1A1A1A', border: `2px solid ${C.border}`,
+                bgcolor: 'var(--c-surface)', border: `2px solid ${C.border}`,
                 fontSize: '2rem', fontWeight: 700, color: C.green,
               }}
             >
@@ -263,7 +308,7 @@ export default function Home() {
                     <Icon sx={{ fontSize: 14, color: C.green }} />
                   </Box>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', flex: 1 }}>
-                    <Typography sx={{ fontSize: 11, color: '#555', textTransform: 'uppercase', letterSpacing: 1 }}>
+                    <Typography sx={{ fontSize: 11, color: 'var(--c-muted)', textTransform: 'uppercase', letterSpacing: 1 }}>
                       {label}
                     </Typography>
                     <Typography sx={{ fontSize: 13, fontWeight: 600, color: C.sub }}>
@@ -277,6 +322,11 @@ export default function Home() {
         </Box>
       </Box>
 
+
+      {/* ═══════════════════════════════════════
+          SECTION 2.5 — 통계 카운터
+      ═══════════════════════════════════════ */}
+      <StatsSection />
 
       {/* ═══════════════════════════════════════
           SECTION 3 — 주요 스킬 프리뷰
@@ -304,6 +354,80 @@ export default function Home() {
   )
 }
 
+
+/* ── 통계 카운터 섹션 ── */
+const STATS = [
+  { label: '완성 프로젝트', to: 4,   suffix: '개' },
+  { label: '기술 스택',     to: 15,  suffix: '+' },
+  { label: '학습 기간',     to: 1,   suffix: '년+' },
+  { label: '코드 커밋',     to: 100, suffix: '+' },
+]
+
+function StatsSection() {
+  const ref = useRef(null)
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) setVisible(true) },
+      { threshold: 0.3 }
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+
+  return (
+    <Box
+      ref={ref}
+      sx={{
+        bgcolor: C.surface,
+        borderTop: `1px solid ${C.border}`,
+        borderBottom: `1px solid ${C.border}`,
+        py: { xs: 6, md: 8 },
+        px: { xs: 3, md: 8 },
+      }}
+    >
+      <Box sx={{
+        maxWidth: 900, mx: 'auto',
+        display: 'grid',
+        gridTemplateColumns: { xs: '1fr 1fr', md: 'repeat(4, 1fr)' },
+        gap: { xs: 5, md: 2 },
+      }}>
+        {STATS.map(({ label, to, suffix }, i) => (
+          <Box
+            key={label}
+            sx={{
+              textAlign: 'center',
+              opacity: visible ? 1 : 0,
+              transform: visible ? 'translateY(0)' : 'translateY(24px)',
+              transition: `opacity 0.6s ease ${i * 0.12}s, transform 0.6s ease ${i * 0.12}s`,
+            }}
+          >
+            <Typography sx={{
+              fontFamily: SYNE,
+              fontSize: { xs: '2.8rem', md: '3.4rem' },
+              fontWeight: 800, color: C.green, lineHeight: 1,
+            }}>
+              <CountUp to={to} duration={1.8} delay={i * 0.15} />
+              <Box component="span" sx={{ fontSize: { xs: '1.4rem', md: '1.8rem' }, ml: 0.3 }}>
+                {suffix}
+              </Box>
+            </Typography>
+            <Box sx={{ width: 28, height: 2, bgcolor: C.green, mx: 'auto', my: 1, opacity: 0.5 }} />
+            <Typography sx={{
+              fontSize: 10, color: C.muted,
+              letterSpacing: 3, textTransform: 'uppercase', fontFamily: SYNE,
+            }}>
+              {label}
+            </Typography>
+          </Box>
+        ))}
+      </Box>
+    </Box>
+  )
+}
 
 /* ── 주요 스킬 프리뷰 섹션 ── */
 function SkillsPreview() {
@@ -390,14 +514,14 @@ function SkillsPreview() {
                 componentsProps={{
                   tooltip: {
                     sx: {
-                      bgcolor: '#1A1A1A',
+                      bgcolor: 'var(--c-surface)',
                       border: `1px solid ${color}44`,
                       borderRadius: 2,
                       boxShadow: `0 4px 20px rgba(0,0,0,0.5)`,
                       p: 1.5,
                     },
                   },
-                  arrow: { sx: { color: '#1A1A1A' } },
+                  arrow: { sx: { color: 'var(--c-surface)' } },
                 }}
               >
                 <Box

@@ -12,15 +12,15 @@ import BlurText        from './BlurText'
 const PORTFOLIO_URL = 'https://jonghyo-vibe.github.io/my-first-website/my-portfolio/'
 
 const greenField = {
-  '& label': { color: 'var(--color-text-muted)' },
-  '& label.Mui-focused': { color: 'var(--color-primary-dark)' },
+  '& label': { color: 'var(--c-muted)' },
+  '& label.Mui-focused': { color: 'var(--c-green)' },
   '& .MuiOutlinedInput-root': {
-    color: 'var(--color-text-primary)',
-    '& fieldset':             { borderColor: 'var(--color-border-default)' },
-    '&:hover fieldset':       { borderColor: 'var(--color-primary)' },
-    '&.Mui-focused fieldset': { borderColor: 'var(--color-primary-dark)' },
+    color: 'var(--c-text)',
+    '& fieldset':             { borderColor: 'var(--c-border)' },
+    '&:hover fieldset':       { borderColor: 'var(--c-green)' },
+    '&.Mui-focused fieldset': { borderColor: 'var(--c-green)' },
   },
-  '& .MuiSelect-icon': { color: 'var(--color-text-muted)' },
+  '& .MuiSelect-icon': { color: 'var(--c-muted)' },
 }
 
 const INIT_FORM = {
@@ -58,7 +58,7 @@ const ContactSection = () => {
   }
 
   return (
-    <Box sx={{ background: 'var(--color-bg-primary)', minHeight: '100vh' }}>
+    <Box sx={{ background: 'var(--c-bg)', minHeight: '100vh' }}>
       <Box
         sx={{
           width: '100%', maxWidth: 1100, mx: 'auto',
@@ -68,14 +68,14 @@ const ContactSection = () => {
         {/* ── 섹션 헤더 ── */}
         <Typography
           variant="overline"
-          sx={{ color: 'var(--color-primary)', letterSpacing: 4, display: 'block', mb: 1, textAlign: 'center' }}
+          sx={{ color: 'var(--c-green)', letterSpacing: 4, display: 'block', mb: 1, textAlign: 'center' }}
         >
           CONTACT
         </Typography>
-        <Typography variant="h2" sx={{ color: 'var(--color-text-primary)', mb: 1, textAlign: 'center', display: 'flex', justifyContent: 'center' }}>
+        <Typography variant="h2" sx={{ color: 'var(--c-text)', mb: 1, textAlign: 'center', display: 'flex', justifyContent: 'center' }}>
           <BlurText text="Contact" delay={100} animateBy="chars" direction="bottom" threshold={0.2} />
         </Typography>
-        <Divider sx={{ mb: 6, borderColor: 'var(--color-border-glow)', maxWidth: 80, mx: 'auto' }} />
+        <Divider sx={{ mb: 6, borderColor: 'var(--c-green)', maxWidth: 80, mx: 'auto' }} />
 
         {/* ── SNS / QR / 이메일 카드 3개 ── */}
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 6, flexWrap: 'wrap', alignItems: 'stretch', gap: 2 }}>
@@ -83,8 +83,8 @@ const ContactSection = () => {
           {/* SNS 카드 */}
           <Card sx={{
             flex: 1, minWidth: 180, maxWidth: 280,
-            background: '#111111',
-            border: '1px solid var(--color-border-default)',
+            background: 'var(--c-surface)',
+            border: '1px solid var(--c-border)',
             borderRadius: 3,
             boxShadow: '0 2px 12px rgba(34,197,94,0.1)',
             overflow: 'hidden',
@@ -97,7 +97,7 @@ const ContactSection = () => {
               sx={{ width: '100%', height: 130, objectFit: 'cover', flexShrink: 0 }}
             />
             <CardContent sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', p: '16px !important' }}>
-              <Typography variant="overline" sx={{ color: 'var(--color-primary-dark)', letterSpacing: 3, display: 'block', mb: 1.5, textAlign: 'center' }}>
+              <Typography variant="overline" sx={{ color: 'var(--c-green)', letterSpacing: 3, display: 'block', mb: 1.5, textAlign: 'center' }}>
                 SNS
               </Typography>
               <Button
@@ -109,12 +109,12 @@ const ContactSection = () => {
                 fullWidth
                 size="small"
                 sx={{
-                  borderColor: 'var(--color-primary)',
-                  color: 'var(--color-primary-dark)',
+                  borderColor: 'var(--c-green)',
+                  color: 'var(--c-green)',
                   borderRadius: 2,
                   textTransform: 'none',
                   fontSize: '0.8rem',
-                  '&:hover': { borderColor: 'var(--color-primary-dark)', background: 'var(--color-secondary-light)' },
+                  '&:hover': { borderColor: 'var(--c-green)', background: 'rgba(34,197,94,0.08)' },
                 }}
               >
                 @csfdr99
@@ -125,20 +125,20 @@ const ContactSection = () => {
           {/* QR 카드 */}
           <Card sx={{
             flex: 1, minWidth: 180, maxWidth: 280,
-            background: '#111111',
-            border: '1px solid var(--color-border-default)',
+            background: 'var(--c-surface)',
+            border: '1px solid var(--c-border)',
             borderRadius: 3,
             boxShadow: '0 2px 12px rgba(34,197,94,0.1)',
             display: 'flex', flexDirection: 'column',
           }}>
             <CardContent sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', p: '16px !important' }}>
-              <Typography variant="overline" sx={{ color: 'var(--color-primary-dark)', letterSpacing: 3, display: 'block', mb: 2, textAlign: 'center' }}>
+              <Typography variant="overline" sx={{ color: 'var(--c-green)', letterSpacing: 3, display: 'block', mb: 2, textAlign: 'center' }}>
                 QR CODE
               </Typography>
               <Box sx={{ background: 'white', p: 1, borderRadius: 2, display: 'inline-block' }}>
                 <QRCodeSVG value={PORTFOLIO_URL} size={130} fgColor="#1B4332" />
               </Box>
-              <Typography variant="caption" sx={{ color: 'var(--color-text-muted)', display: 'block', mt: 1.5, textAlign: 'center' }}>
+              <Typography variant="caption" sx={{ color: 'var(--c-muted)', display: 'block', mt: 1.5, textAlign: 'center' }}>
                 포트폴리오 바로가기
               </Typography>
             </CardContent>
@@ -147,14 +147,14 @@ const ContactSection = () => {
           {/* 이메일 카드 */}
           <Card sx={{
             flex: 1, minWidth: 180, maxWidth: 280,
-            background: '#111111',
-            border: '1px solid var(--color-border-default)',
+            background: 'var(--c-surface)',
+            border: '1px solid var(--c-border)',
             borderRadius: 3,
             boxShadow: '0 2px 12px rgba(34,197,94,0.1)',
             display: 'flex', flexDirection: 'column',
           }}>
             <CardContent sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', p: '16px !important' }}>
-              <Typography variant="overline" sx={{ color: 'var(--color-primary-dark)', letterSpacing: 3, display: 'block', mb: 2, textAlign: 'center', alignSelf: 'stretch' }}>
+              <Typography variant="overline" sx={{ color: 'var(--c-green)', letterSpacing: 3, display: 'block', mb: 2, textAlign: 'center', alignSelf: 'stretch' }}>
                 EMAIL
               </Typography>
               <Box sx={{
@@ -168,10 +168,10 @@ const ContactSection = () => {
                   N
                 </Typography>
               </Box>
-              <Typography sx={{ fontSize: 14, color: 'var(--color-text-primary)', fontWeight: 700, wordBreak: 'break-all', textAlign: 'center', lineHeight: 1.6, mt: 'auto' }}>
+              <Typography sx={{ fontSize: 14, color: 'var(--c-text)', fontWeight: 700, wordBreak: 'break-all', textAlign: 'center', lineHeight: 1.6, mt: 'auto' }}>
                 whdgy3019@naver.com
               </Typography>
-              <Typography variant="caption" sx={{ color: 'var(--color-text-muted)', mt: 0.5 }}>
+              <Typography variant="caption" sx={{ color: 'var(--c-muted)', mt: 0.5 }}>
                 네이버 메일
               </Typography>
             </CardContent>
@@ -182,20 +182,20 @@ const ContactSection = () => {
         {/* ── 방명록 폼 ── */}
         <Typography
           variant="overline"
-          sx={{ color: 'var(--color-primary-dark)', letterSpacing: 3, display: 'block', mb: 2 }}
+          sx={{ color: 'var(--c-green)', letterSpacing: 3, display: 'block', mb: 2 }}
         >
           GUESTBOOK
         </Typography>
         <Card
           sx={{
-            background: '#111111',
-            border: '1px solid var(--color-border-default)',
+            background: 'var(--c-surface)',
+            border: '1px solid var(--c-border)',
             borderRadius: 3,
             boxShadow: '0 2px 16px rgba(34,197,94,0.1)',
           }}
         >
           <CardContent sx={{ p: { xs: 3, md: 4 } }}>
-            <Typography variant="h5" sx={{ color: 'var(--color-text-primary)', mb: 3, fontWeight: 600 }}>
+            <Typography variant="h5" sx={{ color: 'var(--c-text)', mb: 3, fontWeight: 600 }}>
               방명록 남기기 ✍️
             </Typography>
 
@@ -217,7 +217,7 @@ const ContactSection = () => {
               <FormControl fullWidth sx={{ ...greenField, gridColumn: { xs: '1', sm: '1 / -1' } }}>
                 <InputLabel>어떻게 알게 되었나요?</InputLabel>
                 <Select value={form.how_found} label="어떻게 알게 되었나요?" onChange={set('how_found')}
-                  MenuProps={{ PaperProps: { sx: { background: '#111111' } } }}
+                  MenuProps={{ PaperProps: { sx: { background: 'var(--c-surface)', color: 'var(--c-text)' } } }}
                 >
                   {['지인 소개', 'SNS', '검색엔진', '직접 방문', '기타'].map((h) => (
                     <MenuItem key={h} value={h}>{h}</MenuItem>
@@ -227,7 +227,7 @@ const ContactSection = () => {
 
               {/* 별점 */}
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, pl: 1, gridColumn: '1 / -1' }}>
-                <Typography sx={{ color: 'var(--color-text-muted)', mr: 1, fontSize: '0.9rem' }}>
+                <Typography sx={{ color: 'var(--c-muted)', mr: 1, fontSize: '0.9rem' }}>
                   별점
                 </Typography>
                 {[1, 2, 3, 4, 5].map((star) => (
@@ -240,7 +240,7 @@ const ContactSection = () => {
                       cursor: 'pointer',
                       fontSize: '2rem',
                       lineHeight: 1,
-                      color: star <= (hover || form.rating) ? '#F4A623' : '#3A3A3A',
+                      color: star <= (hover || form.rating) ? '#F4A623' : 'var(--c-border)',
                       transition: 'color 0.15s',
                       userSelect: 'none',
                     }}
@@ -249,7 +249,7 @@ const ContactSection = () => {
                   </Box>
                 ))}
                 {form.rating > 0 && (
-                  <Typography sx={{ color: 'var(--color-primary-dark)', ml: 1, fontSize: '0.85rem' }}>
+                  <Typography sx={{ color: 'var(--c-green)', ml: 1, fontSize: '0.85rem' }}>
                     {form.rating}점
                   </Typography>
                 )}
@@ -273,9 +273,9 @@ const ContactSection = () => {
                   size="large"
                   disabled={loading}
                   sx={{
-                    background: 'var(--color-button-primary)',
+                    background: 'var(--c-green)',
                     color: 'white',
-                    '&:hover': { background: 'var(--color-button-hover)' },
+                    '&:hover': { background: '#16A34A' },
                     px: 5, py: 1.5, borderRadius: 2,
                     minWidth: 180,
                   }}

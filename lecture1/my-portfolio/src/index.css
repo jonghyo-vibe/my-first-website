@@ -1,3 +1,41 @@
+/* ════════════════════════════════════════
+   다크 / 라이트 테마 CSS 변수
+   ════════════════════════════════════════ */
+:root,
+[data-theme="dark"] {
+  --c-bg:      #0A0A0A;
+  --c-surface: #111111;
+  --c-border:  #1E1E1E;
+  --c-green:   #22C55E;
+  --c-sky:     #38BDF8;
+  --c-text:    #FFFFFF;
+  --c-muted:   #666666;
+  --c-sub:     #999999;
+  --c-nav-bg:  rgba(10,10,10,0.82);
+}
+
+[data-theme="light"] {
+  --c-bg:      #FAFAFA;
+  --c-surface: #F0F0F0;
+  --c-border:  #E0E0E0;
+  --c-green:   #16A34A;
+  --c-sky:     #0284C7;
+  --c-text:    #09090B;
+  --c-muted:   #71717A;
+  --c-sub:     #A1A1AA;
+  --c-nav-bg:  rgba(250,250,250,0.88);
+}
+
+/* 테마 전환 색상 애니메이션 (transform/opacity 제외 → 기존 애니메이션 보호) */
+*,
+*::before,
+*::after {
+  transition:
+    background-color 0.35s ease,
+    color            0.35s ease,
+    border-color     0.35s ease;
+}
+
 :root {
   /* Primary — 그린 */
   --color-primary:       #22C55E;
@@ -44,18 +82,16 @@
 
 body {
   font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
-  background-color: var(--color-bg-primary);
-  color: var(--color-text-primary);
+  background-color: var(--c-bg);
+  color: var(--c-text);
   -webkit-font-smoothing: antialiased;
 }
 
 a {
-  color: var(--color-link);
+  color: inherit;
   text-decoration: none;
 }
-a:hover   { color: var(--color-link-hover); }
-a:visited { color: var(--color-link-visited); }
 a:focus-visible {
-  outline: 2px solid var(--color-focus-ring);
+  outline: 2px solid var(--c-green);
   border-radius: 2px;
 }

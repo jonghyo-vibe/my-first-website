@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { PortfolioProvider } from './context/PortfolioContext'
+import { ThemeProvider } from './context/ThemeContext'
 import Navigation from './components/Navigation'
 import Home from './pages/Home'
 import AboutMe from './pages/AboutMe'
@@ -9,9 +10,10 @@ import CursorGlow from './components/CursorGlow'
 
 function App() {
   return (
+    <ThemeProvider>
     <PortfolioProvider>
       <CursorGlow />
-      <BrowserRouter basename="/my-first-website/my-portfolio">
+      <BrowserRouter basename="/">
         <Navigation />
         <Routes>
           <Route path="/"         element={<Home />} />
@@ -21,6 +23,7 @@ function App() {
         </Routes>
       </BrowserRouter>
     </PortfolioProvider>
+    </ThemeProvider>
   )
 }
 
