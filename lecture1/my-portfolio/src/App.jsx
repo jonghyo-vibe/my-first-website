@@ -13,7 +13,7 @@ function App() {
     <ThemeProvider>
     <PortfolioProvider>
       <CursorGlow />
-      <BrowserRouter basename="/my-first-website/my-portfolio">
+      <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '') || '/'}>
         <Navigation />
         <Routes>
           <Route path="/"         element={<Home />} />
