@@ -32,7 +32,7 @@ const vertex = /* glsl */`
     mPos.y += sin(t * random.y + 6.28 * random.x) * mix(0.1, 1.5, random.w);
     mPos.z += sin(t * random.w + 6.28 * random.y) * mix(0.1, 1.5, random.z);
     vec4 mvPos = viewMatrix * mPos;
-    gl_PointSize = uSizeRandomness === 0.0
+    gl_PointSize = uSizeRandomness == 0.0
       ? uBaseSize
       : (uBaseSize * (1.0 + uSizeRandomness * (random.x - 0.5))) / length(mvPos.xyz);
     gl_Position = projectionMatrix * mvPos;
@@ -136,6 +136,9 @@ export default function Particles({
         transparent: true,
         depthTest: false,
       })
+
+      // OGL silently skips uniformLocations setup when shader linking fails (no throw)
+      if (!program.uniformLocations) throw new Error('shader link failed')
 
       mesh = new Mesh(gl, { mode: gl.POINTS, geometry, program })
     } catch (e) {
