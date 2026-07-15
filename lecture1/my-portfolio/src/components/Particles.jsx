@@ -98,61 +98,81 @@ export default function Particles({
     window.addEventListener('resize', resize)
     resize()
 
-    const count = particleCount
-    const positions = new Float32Array(count * 3)
-    const randoms = new Float32Array(count * 4)
-    const colors = new Float32Array(count * 3)
+    let mesh, program
+    try {
+      const count = particleCount
+      const positions = new Float32Array(count * 3)
+      const randoms = new Float32Array(count * 4)
+      const colors = new Float32Array(count * 3)
 
-    for (let i = 0; i < count; i++) {
-      let x, y, z, len
-      do {
-        x = Math.random() * 2 - 1; y = Math.random() * 2 - 1; z = Math.random() * 2 - 1
-        len = x * x + y * y + z * z
-      } while (len > 1 || len === 0)
-      const r = Math.cbrt(Math.random())
-      positions.set([x * r, y * r, z * r], i * 3)
-      randoms.set([Math.random(), Math.random(), Math.random(), Math.random()], i * 4)
-      const col = hexToRgb(particleColors[Math.floor(Math.random() * particleColors.length)])
-      colors.set(col, i * 3)
+      for (let i = 0; i < count; i++) {
+        let x, y, z, len
+        do {
+          x = Math.random() * 2 - 1; y = Math.random() * 2 - 1; z = Math.random() * 2 - 1
+          len = x * x + y * y + z * z
+        } while (len > 1 || len === 0)
+        const r = Math.cbrt(Math.random())
+        positions.set([x * r, y * r, z * r], i * 3)
+        randoms.set([Math.random(), Math.random(), Math.random(), Math.random()], i * 4)
+        const col = hexToRgb(particleColors[Math.floor(Math.random() * particleColors.length)])
+        colors.set(col, i * 3)
+      }
+
+      const geometry = new Geometry(gl, {
+        position: { size: 3, data: positions },
+        random:   { size: 4, data: randoms },
+        color:    { size: 3, data: colors },
+      })
+
+      program = new Program(gl, {
+        vertex, fragment,
+        uniforms: {
+          uTime:          { value: 0 },
+          uSpread:        { value: particleSpread },
+          uBaseSize:      { value: particleBaseSize * window.devicePixelRatio },
+          uSizeRandomness:{ value: sizeRandomness },
+          uAlphaParticles:{ value: alphaParticles ? 1 : 0 },
+        },
+        transparent: true,
+        depthTest: false,
+      })
+
+      mesh = new Mesh(gl, { mode: gl.POINTS, geometry, program })
+    } catch (e) {
+      window.removeEventListener('resize', resize)
+      if (gl?.canvas && container.contains(gl.canvas)) container.removeChild(gl.canvas)
+      return
     }
 
-    const geometry = new Geometry(gl, {
-      position: { size: 3, data: positions },
-      random:   { size: 4, data: randoms },
-      color:    { size: 3, data: colors },
-    })
-
-    const program = new Program(gl, {
-      vertex, fragment,
-      uniforms: {
-        uTime:          { value: 0 },
-        uSpread:        { value: particleSpread },
-        uBaseSize:      { value: particleBaseSize * window.devicePixelRatio },
-        uSizeRandomness:{ value: sizeRandomness },
-        uAlphaParticles:{ value: alphaParticles ? 1 : 0 },
-      },
-      transparent: true,
-      depthTest: false,
-    })
-
-    const mesh = new Mesh(gl, { mode: gl.POINTS, geometry, program })
     let raf, last = performance.now(), elapsed = 0
+
+    const handleContextLost = (e) => {
+      e.preventDefault()
+      cancelAnimationFrame(raf)
+    }
+    gl.canvas.addEventListener('webglcontextlost', handleContextLost)
 
     const update = t => {
       raf = requestAnimationFrame(update)
+      if (gl.isContextLost()) return
       elapsed += (t - last) * speed
       last = t
       program.uniforms.uTime.value = elapsed * 0.001
       mesh.rotation.x = Math.sin(elapsed * 0.0002) * 0.1
       mesh.rotation.y = Math.cos(elapsed * 0.0005) * 0.15
       mesh.rotation.z += 0.01 * speed
-      renderer.render({ scene: mesh, camera })
+      try {
+        renderer.render({ scene: mesh, camera })
+      } catch (e) {
+        cancelAnimationFrame(raf)
+      }
     }
     raf = requestAnimationFrame(update)
 
     return () => {
       cancelAnimationFrame(raf)
       window.removeEventListener('resize', resize)
+      gl.canvas.removeEventListener('webglcontextlost', handleContextLost)
       if (gl?.canvas && container.contains(gl.canvas)) container.removeChild(gl.canvas)
       gl?.getExtension('WEBGL_lose_context')?.loseContext()
     }
