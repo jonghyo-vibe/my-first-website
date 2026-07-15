@@ -13,7 +13,7 @@ function App() {
     <ThemeProvider>
     <PortfolioProvider>
       <CursorGlow />
-      <BrowserRouter basename="/">
+      <BrowserRouter basename="/my-first-website/my-portfolio">
         <Navigation />
         <Routes>
           <Route path="/"         element={<Home />} />
